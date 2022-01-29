@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -21,6 +23,8 @@
   width: 50px !important;
   background: transparent !important;
   border: none !important;
+  box-shadow: 0 0 8px rgba(0, 0, 0, .3);
+  border-radius: 50%;
 }
 
 #fb-login:hover {

@@ -27,7 +27,7 @@ const Register = () => {
       <div className='p-9 flex-1'>
         <div className='flex items-center mb-12'>
           <img src={`${process.env.PUBLIC_URL}/images/logo.png`} alt='Inspace' />
-          <h1 className='text-2xl ml-6'>Inspace</h1>
+          <h1 className='text-3xl ml-6 font-logo'>Inspace</h1>
         </div>
         <h1 className='text-3xl font-medium mb-7'>Sign Up</h1>
         <form onSubmit={handleSubmit}>
