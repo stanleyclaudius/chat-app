@@ -1,3 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.abcRioButtonBlue {
+  border-radius: 50% !important;
+  background: rgb(243 244 246) !important;
+  height: 52px !important;
+}
+
+.abcRioButtonIcon {
+  background: rgb(243 244 246) !important;
+}
+
+.abcRioButtonContents {
+  width: 0;
+  display: none;
+}
+
+#fb-login {
+  width: 50px !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+#fb-login:hover {
+  box-shadow: none !important;
+}
+
+#fb-login img {
+  border-radius: 50%;
+}
+
+#fb-login span {
+  display: none !important;
+}
