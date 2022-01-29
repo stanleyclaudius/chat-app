@@ -50,8 +50,8 @@ const Login = () => {
               <input type={showPassword ? 'text' : 'password'} name='password' value={userData.password} onChange={handleChange} placeholder='Password' className='w-full h-11 outline-0 ml-5 pr-4' />
               {
                 showPassword
-                ? <FaEyeSlash className='text-gray-600' onClick={() => setShowPassword(false)} />
-                : <FaEye className='text-gray-600' onClick={() => setShowPassword(true)} />
+                ? <FaEyeSlash className='text-gray-600 cursor-pointer' onClick={() => setShowPassword(false)} />
+                : <FaEye className='text-gray-600 cursor-pointer' onClick={() => setShowPassword(true)} />
               }
             </div>
             <Link to='/forget' className='text-gray-600'>Forget password?</Link>
