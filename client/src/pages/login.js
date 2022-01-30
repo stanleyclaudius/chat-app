@@ -80,7 +80,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <div className='w-full flex-[2] pointer-events-none'>
+      <div className='md:block hidden w-full flex-[2] pointer-events-none'>
         <img src={`${process.env.PUBLIC_URL}/images/authentication.png`} alt='Inspace Authentication' className='w-full h-screen object-cover' />
       </div>
     </div>
