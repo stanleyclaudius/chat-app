@@ -59,8 +59,25 @@ const Dashboard = () => {
             <GoKebabVertical className='text-white text-2xl cursor-pointer' />
           </div>
         </div>
-        <div className='flex-1'>
-          dflkdsf
+        <div className='flex-1 px-5 py-7'>
+          <div className='mb-7 flex items-end justify-end flex-col'>
+            <div className='w-80 float-right break-all bg-[#41AEF3] text-white p-3 rounded-md mb-2'>
+              hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello
+            </div>
+            <p className='text-gray-400'>30/01/2022; 3:01PM</p>
+          </div>
+          <div className='mb-7 flex items-start justify-start flex-col'>
+            <div className='w-80 bg-gray-100 break-all p-3 rounded-md mb-2'>
+              hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello
+            </div>
+            <p className='text-gray-400'>30/01/2022; 3:01PM</p>
+          </div>
+          <div className='mb-7 flex items-end justify-end flex-col'>
+            <div className='w-80 float-right break-all bg-[#41AEF3] text-white p-3 rounded-md mb-2'>
+              hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello
+            </div>
+            <p className='text-gray-400'>30/01/2022; 3:01PM</p>
+          </div>
         </div>
         <div className='border-t-2 py-3 px-5'>
           <ChatInput />
