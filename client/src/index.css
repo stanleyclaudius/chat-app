@@ -39,16 +39,25 @@
   display: none !important;
 }
 
-.contact-container::-webkit-scrollbar {
+.message-container::-webkit-scrollbar {
   width: 10px;
 }
 
-.contact-container::-webkit-scrollbar-track {
+.message-container::-webkit-scrollbar-track {
   border: 1px solid rgb(182, 182, 182);
   border-radius: 10px;
 }
 
-.contact-container::-webkit-scrollbar-thumb {
+.message-container::-webkit-scrollbar-thumb {
   background: #cecece;
   border-radius: 10px;
+}
+
+.contact-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.contact-container::-webkit-scrollbar {
+  display: none;
 }

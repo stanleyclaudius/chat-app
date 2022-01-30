@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { FaRegUser } from 'react-icons/fa'
+import { FaRegUser, FaEye, FaEyeSlash } from 'react-icons/fa'
 import { BiLock } from 'react-icons/bi'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from './../utils/constant'
 import GoogleLogin from 'react-google-login-lite'

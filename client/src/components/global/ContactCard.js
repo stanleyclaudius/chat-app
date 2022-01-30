@@ -1,8 +1,8 @@
 import Avatar from './Avatar'
 
-const ContactCard = ({ onClick }) => {
+const ContactCard = ({ setSelectContact }) => {
   return (
-    <div className='mb-5 flex items-center bg-gray-100 rounded-md p-4 cursor-pointer hover:bg-gray-200 transition-[background]' onClick={onClick}>
+    <div className='mb-5 flex items-center bg-gray-100 rounded-md p-4 cursor-pointer hover:bg-gray-200 transition-[background]' onClick={() => setSelectContact(true)}>
       <Avatar />
       <div className='w-full ml-4'>
         <p className='text-xl mb-2'>Lorem Ipsum</p>
