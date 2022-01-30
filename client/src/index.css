@@ -38,3 +38,17 @@
 #fb-login span {
   display: none !important;
 }
+
+.contact-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.contact-container::-webkit-scrollbar-track {
+  border: 1px solid rgb(182, 182, 182);
+  border-radius: 10px;
+}
+
+.contact-container::-webkit-scrollbar-thumb {
+  background: #cecece;
+  border-radius: 10px;
+}
