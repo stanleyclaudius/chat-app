@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { IoChevronBackOutline } from 'react-icons/io5'
-import { AiFillWechat } from 'react-icons/ai'
+import { AiFillWechat, AiOutlineSearch } from 'react-icons/ai'
 import { FaEdit } from 'react-icons/fa'
 import { MdLogout } from 'react-icons/md'
-import ContactModal from '../modal/ContactModal'
+import ContactModal from './../modal/ContactModal'
+import SearchPeopleModal from './../modal/SearchPeopleModal'
 import Avatar from './Avatar'
 
 const Header = ({ selectContact, setSelectContact }) => {
   const [openDropdown, setOpenDropdown] = useState(false)
   const [openContactListModal, setOpenContactListModal] = useState(false)
+  const [openSearchPeopleModal, setOpenSearchPeopleModal] = useState(false)
 
   return (
     <>
@@ -30,8 +32,12 @@ const Header = ({ selectContact, setSelectContact }) => {
             <div className='cursor-pointer' onClick={() => setOpenDropdown(!openDropdown)}>
               <Avatar size='20px' />
             </div>
-            <div className={`border-2 transition-transform absolute origin-top translate-y-[10px] top-full right-0 w-[150px] bg-white drop-shadow-xl rounded-md ${openDropdown ? 'scale-y-100' : 'scale-y-0'}`}>
-              <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer border-b-2 rounded-tl-md rounded-tr-md' onClick={() => setOpenContactListModal(true)}>
+            <div className={`border-2 transition-transform absolute origin-top translate-y-[10px] top-full right-0 w-[170px] bg-white drop-shadow-xl rounded-md ${openDropdown ? 'scale-y-100' : 'scale-y-0'}`}>
+              <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer border-b-2 rounded-tl-md rounded-tr-md' onClick={() => setOpenSearchPeopleModal(true)}>
+                <AiOutlineSearch className='mr-2 translate-y-[1px]' />
+                <p>Search People</p>
+              </div>
+              <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer border-b-2' onClick={() => setOpenContactListModal(true)}>
                 <AiFillWechat className='mr-2 translate-y-[1px]' />
                 <p>Start Chatting</p>
               </div>
@@ -49,6 +55,7 @@ const Header = ({ selectContact, setSelectContact }) => {
       </div>
 
       <ContactModal openContactListModal={openContactListModal} setOpenContactListModal={setOpenContactListModal} />
+      <SearchPeopleModal openSearchPeopleModal={openSearchPeopleModal} setOpenSearchPeopleModal={setOpenSearchPeopleModal} />
     </>
   )
 }
