@@ -4,7 +4,11 @@ module.exports = {
     fontFamily: {
       'logo': ['Comfortaa']
     },
-    extend: {},
+    extend: {
+      gridTemplateColumns: {
+        'auto-fill': 'repeat(auto-fill, minmax(250px, 1fr))'
+      }
+    },
   },
   plugins: [],
 }

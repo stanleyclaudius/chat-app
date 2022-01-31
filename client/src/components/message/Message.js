@@ -1,4 +1,4 @@
-import Avatar from './../global/Avatar'
+import Avatar from './../general/Avatar'
 
 const Message = ({ type, message, timestamp }) => {
   return (

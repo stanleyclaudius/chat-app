@@ -3,8 +3,8 @@ import { AiOutlineWechat } from 'react-icons/ai'
 import ChatInput from './../components/input/ChatInput'
 import SearchForm from './../components/input/SearchForm'
 import MessageContainer from '../components/message/MessageContainer'
-import ContactContainer from '../components/global/ContactContainer'
-import Header from './../components/global/Header'
+import ContactContainer from '../components/general/ContactContainer'
+import Header from './../components/general/Header'
 
 const Dashboard = () => {
   const [selectContact, setSelectContact] = useState(false)
