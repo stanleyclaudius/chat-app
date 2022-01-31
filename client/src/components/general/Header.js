@@ -5,12 +5,14 @@ import { FaEdit } from 'react-icons/fa'
 import { MdLogout } from 'react-icons/md'
 import ContactModal from './../modal/ContactModal'
 import SearchPeopleModal from './../modal/SearchPeopleModal'
+import EditProfileModal from './../modal/EditProfileModal'
 import Avatar from './Avatar'
 
 const Header = ({ selectContact, setSelectContact }) => {
   const [openDropdown, setOpenDropdown] = useState(false)
   const [openContactListModal, setOpenContactListModal] = useState(false)
   const [openSearchPeopleModal, setOpenSearchPeopleModal] = useState(false)
+  const [openEditProfileModal, setOpenEditProfileModal] = useState(false)
 
   return (
     <>
@@ -41,7 +43,7 @@ const Header = ({ selectContact, setSelectContact }) => {
                 <AiFillWechat className='mr-2 translate-y-[1px]' />
                 <p>Start Chatting</p>
               </div>
-              <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer border-b-2'>
+              <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer border-b-2' onClick={() => setOpenEditProfileModal(true)}>
                 <FaEdit className='mr-2 text-lg' />
                 <p>Edit Profile</p>
               </div>
@@ -56,6 +58,7 @@ const Header = ({ selectContact, setSelectContact }) => {
 
       <ContactModal openContactListModal={openContactListModal} setOpenContactListModal={setOpenContactListModal} />
       <SearchPeopleModal openSearchPeopleModal={openSearchPeopleModal} setOpenSearchPeopleModal={setOpenSearchPeopleModal} />
+      <EditProfileModal openEditProfileModal={openEditProfileModal} setOpenEditProfileModal={setOpenEditProfileModal} />
     </>
   )
 }
