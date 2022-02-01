@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { IoChevronBackOutline } from 'react-icons/io5'
 import { AiFillWechat, AiOutlineSearch } from 'react-icons/ai'
 import { FaEdit } from 'react-icons/fa'
+import { BiLock } from 'react-icons/bi'
 import { MdLogout } from 'react-icons/md'
 import ContactModal from './../modal/ContactModal'
 import SearchPeopleModal from './../modal/SearchPeopleModal'
 import EditProfileModal from './../modal/EditProfileModal'
+import ChangePasswordModal from './../modal/ChangePasswordModal'
 import Avatar from './Avatar'
 
 const Header = ({ selectContact, setSelectContact }) => {
@@ -13,6 +15,7 @@ const Header = ({ selectContact, setSelectContact }) => {
   const [openContactListModal, setOpenContactListModal] = useState(false)
   const [openSearchPeopleModal, setOpenSearchPeopleModal] = useState(false)
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false)
+  const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false)
 
   return (
     <>
@@ -34,7 +37,7 @@ const Header = ({ selectContact, setSelectContact }) => {
             <div className='cursor-pointer' onClick={() => setOpenDropdown(!openDropdown)}>
               <Avatar size='20px' />
             </div>
-            <div className={`border-2 transition-transform absolute origin-top translate-y-[10px] top-full right-0 w-[170px] bg-white drop-shadow-xl rounded-md ${openDropdown ? 'scale-y-100' : 'scale-y-0'}`}>
+            <div className={`border-2 transition-transform absolute origin-top translate-y-[10px] top-full right-0 w-[190px] bg-white drop-shadow-xl rounded-md ${openDropdown ? 'scale-y-100' : 'scale-y-0'}`}>
               <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer border-b-2 rounded-tl-md rounded-tr-md' onClick={() => setOpenSearchPeopleModal(true)}>
                 <AiOutlineSearch className='mr-2 translate-y-[1px]' />
                 <p>Search People</p>
@@ -46,6 +49,10 @@ const Header = ({ selectContact, setSelectContact }) => {
               <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer border-b-2' onClick={() => setOpenEditProfileModal(true)}>
                 <FaEdit className='mr-2 text-lg' />
                 <p>Edit Profile</p>
+              </div>
+              <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer border-b-2' onClick={() => setOpenChangePasswordModal(true)}>
+                <BiLock className='mr-2 text-lg translate-y-[1px]' />
+                <p>Change Password</p>
               </div>
               <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer rounded-bl-md rounded-br-md'>
                 <MdLogout className='mr-2 translate-y-[2px] text-xl' />
@@ -59,6 +66,7 @@ const Header = ({ selectContact, setSelectContact }) => {
       <ContactModal openContactListModal={openContactListModal} setOpenContactListModal={setOpenContactListModal} />
       <SearchPeopleModal openSearchPeopleModal={openSearchPeopleModal} setOpenSearchPeopleModal={setOpenSearchPeopleModal} />
       <EditProfileModal openEditProfileModal={openEditProfileModal} setOpenEditProfileModal={setOpenEditProfileModal} />
+      <ChangePasswordModal openChangePasswordModal={openChangePasswordModal} setOpenChangePasswordModal={setOpenChangePasswordModal} />
     </>
   )
 }
