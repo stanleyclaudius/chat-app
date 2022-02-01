@@ -20,7 +20,7 @@ const ForgetPasswordModal = ({ openForgetModal, setOpenForgetModal }) => {
           <form onSubmit={handleSubmit}>
             <div className='flex items-center border-2 rounded-md py-2 px-3'>
               <FaRegUser className='text-gray-500' />
-              <input type='text' placeholder='Email' className='w-full ml-3' autoComplete='off' value={email} onChange={e => setEmail(e.target.value)} />
+              <input type='text' placeholder='Email' className='w-full ml-3 outline-0' autoComplete='off' value={email} onChange={e => setEmail(e.target.value)} />
             </div>
             <button type='submit' className='bg-blue-500 text-white mt-4 rounded-md w-20 h-9 hover:bg-blue-600 float-right'>Submit</button>
             <div className='clear-both' />

@@ -4,6 +4,8 @@ import { AiFillWechat, AiOutlineSearch } from 'react-icons/ai'
 import { FaEdit } from 'react-icons/fa'
 import { BiLock } from 'react-icons/bi'
 import { MdLogout } from 'react-icons/md'
+import { RiPhoneFill } from 'react-icons/ri'
+import { IoVideocam } from 'react-icons/io5'
 import ContactModal from './../modal/ContactModal'
 import SearchPeopleModal from './../modal/SearchPeopleModal'
 import EditProfileModal from './../modal/EditProfileModal'
@@ -24,13 +26,20 @@ const Header = ({ selectContact, setSelectContact }) => {
           <img src={`${process.env.PUBLIC_URL}/images/logo.png`} alt='Inspace' width='35' />
           <h1 className='md:block hidden font-logo text-lg ml-4'>Inspace</h1>
         </div>
-        <div className='text-center'>
-          <div className='flex items-center'>
-            {selectContact && <IoChevronBackOutline className='md:hidden block translate-y-[2px] cursor-pointer' onClick={() => setSelectContact(false)} />}
-            <h2 className='text-lg font-medium ml-2'>Lorem Ipsum</h2>
+        {
+          selectContact &&
+          <div className='text-center'>
+            <div className='flex items-center'>
+              {selectContact && <IoChevronBackOutline className='md:hidden block translate-y-[2px] cursor-pointer' onClick={() => setSelectContact(false)} />}
+              <h2 className='text-lg font-medium ml-2'>Lorem Ipsum</h2>
+            </div>
+            <div className='flex items-center mt-1'>
+              <p>Message</p>
+              <RiPhoneFill className='ml-4 text-lg cursor-pointer' />
+              <IoVideocam className='ml-4 text-lg cursor-pointer' />
+            </div>
           </div>
-          <p>Message</p>
-        </div>
+        }
         <div className='flex items-center'>
           <p className='mr-5 md:block hidden'>Lorem Ipsum</p>
           <div className='relative'>
