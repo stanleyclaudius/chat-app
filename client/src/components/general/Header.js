@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { IoChevronBackOutline } from 'react-icons/io5'
 import { AiFillWechat, AiOutlineSearch } from 'react-icons/ai'
 import { FaEdit } from 'react-icons/fa'
@@ -6,6 +8,7 @@ import { BiLock } from 'react-icons/bi'
 import { MdLogout } from 'react-icons/md'
 import { RiPhoneFill } from 'react-icons/ri'
 import { IoVideocam } from 'react-icons/io5'
+import { logout } from './../../redux/actions/authActions'
 import ContactModal from './../modal/ContactModal'
 import SearchPeopleModal from './../modal/SearchPeopleModal'
 import EditProfileModal from './../modal/EditProfileModal'
@@ -18,6 +21,15 @@ const Header = ({ selectContact, setSelectContact }) => {
   const [openSearchPeopleModal, setOpenSearchPeopleModal] = useState(false)
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false)
   const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false)
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { auth } = useSelector(state => state)
+
+  const handleLogout = async() => {
+    await dispatch(logout(auth.token))
+    navigate('/')
+  }
 
   return (
     <>
@@ -63,7 +75,7 @@ const Header = ({ selectContact, setSelectContact }) => {
                 <BiLock className='mr-2 text-lg translate-y-[1px]' />
                 <p>Change Password</p>
               </div>
-              <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer rounded-bl-md rounded-br-md'>
+              <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer rounded-bl-md rounded-br-md' onClick={handleLogout}>
                 <MdLogout className='mr-2 translate-y-[2px] text-xl' />
                 <p>Logout</p>
               </div>
