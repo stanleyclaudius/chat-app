@@ -1,11 +1,16 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FaRegUser, FaEye, FaEyeSlash } from 'react-icons/fa'
 import { BiLock } from 'react-icons/bi'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from './../redux/actions/authActions'
+import { checkEmail } from './../utils/checkEmail'
+import { GLOBAL_TYPES } from './../redux/types/globalTypes'
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from './../utils/constant'
 import GoogleLogin from 'react-google-login-lite'
 import FacebookLogin from 'react-facebook-login-lite'
 import ForgetPasswordModal from './../components/modal/ForgetPasswordModal'
+import Loader from './../components/general/Loader'
 
 const Login = () => {
   const [userData, setUserData] = useState({
@@ -14,6 +19,10 @@ const Login = () => {
   })
   const [showPassword, setShowPassword] = useState(false)
   const [openForgetModal, setOpenForgetModal] = useState(false)
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { auth, alert } = useSelector(state => state)
 
   const onGoogleSuccess = response => {
     console.log(response)
@@ -28,9 +37,29 @@ const Login = () => {
     setUserData({...userData, [name]: value})
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
+
+    if (!userData.email)
+      return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: 'Please provide email field.'} })
+    else if (!checkEmail(userData.email))
+      return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: 'Please provide valid email address.'} })
+
+    if (!userData.password)
+      return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: 'Please provide password field.'} })
+
+    await dispatch(login(userData))
+    setUserData({
+      email: '', password: ''
+    })
   }
+
+  useEffect(() => {
+    if (auth.user)
+      navigate('/')
+
+    return () => navigate('/')
+  }, [auth.user, navigate])
 
   return (
     <>
@@ -59,7 +88,15 @@ const Login = () => {
               <p className='text-gray-600 cursor-pointer' onClick={() => setOpenForgetModal(true)}>Forget password?</p>
             </div>
             <div className='flex items-center justify-between'>
-              <button className='bg-blue-500 text-white rounded-full w-24 h-10 hover:bg-blue-700 transition-[background]'>Sign In</button>
+              <button className={`${alert.loading ? 'bg-blue-300' : 'bg-blue-500'} text-white rounded-full w-24 h-10 ${!alert.loading ? 'hover:bg-blue-700' : undefined} transition-[background] ${alert.loading ? 'cursor-not-allowed' : 'cursor-pointer'}`} disabled={alert.loading ? true : false}>
+                {
+                  alert.loading
+                  ? (
+                    <Loader />
+                  )
+                  : 'Sign In'
+                }
+              </button>
               <Link to='/register' className='bg-gray-100 w-36 block h-10 text-center leading-10 rounded-full hover:bg-gray-200 transition-[background]'>Create Account</Link>
             </div>
           </form>

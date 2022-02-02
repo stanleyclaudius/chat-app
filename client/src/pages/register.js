@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { GLOBAL_TYPES } from './../redux/types/globalTypes'
 import { register } from './../redux/actions/authActions'
 import { checkEmail } from './../utils/checkEmail'
+import Loader from './../components/general/Loader'
 
 const Register = () => {
   const [userData, setUserData] = useState({
@@ -27,7 +28,6 @@ const Register = () => {
 
   const handleSubmit = async e => {
     e.preventDefault()
-    dispatch({ type: GLOBAL_TYPES.ALERT, payload: {} })
 
     if (!userData.name)
       return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: 'Please provide name field.'} })
@@ -91,7 +91,7 @@ const Register = () => {
               {
                 alert.loading
                 ? (
-                  <div className='animate-spin border-2 border-white w-[25px] h-[25px] rounded-full border-t-2 border-t-gray-400 m-auto' />
+                  <Loader />
                 )
                 : 'Sign Up'
               }

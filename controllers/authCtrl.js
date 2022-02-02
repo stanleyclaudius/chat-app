@@ -111,7 +111,10 @@ const authCtrl = {
       })
 
       res.status(200).json({
-        user,
+        user: {
+          ...user._doc,
+          rf_token: ''
+        },
         accessToken
       })
     } catch (err) {
