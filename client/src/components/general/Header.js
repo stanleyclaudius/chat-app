@@ -71,10 +71,13 @@ const Header = ({ selectContact, setSelectContact }) => {
                 <FaEdit className='mr-2 text-lg' />
                 <p>Edit Profile</p>
               </div>
-              <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer border-b-2' onClick={() => setOpenChangePasswordModal(true)}>
-                <BiLock className='mr-2 text-lg translate-y-[1px]' />
-                <p>Change Password</p>
-              </div>
+              {
+                auth.user?.type === 'register' &&
+                <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer border-b-2' onClick={() => setOpenChangePasswordModal(true)}>
+                  <BiLock className='mr-2 text-lg translate-y-[1px]' />
+                  <p>Change Password</p>
+                </div>
+              }
               <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer rounded-bl-md rounded-br-md' onClick={handleLogout}>
                 <MdLogout className='mr-2 translate-y-[2px] text-xl' />
                 <p>Logout</p>

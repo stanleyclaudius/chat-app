@@ -1,5 +1,5 @@
 import { GLOBAL_TYPES } from './../types/globalTypes'
-import { postDataAPI } from './../../utils/fetchData'
+import { patchDataAPI, postDataAPI } from './../../utils/fetchData'
 import { checkTokenValidity } from './../../utils/checkTokenValidity'
 
 export const register = userData => async(dispatch) => {
@@ -224,6 +224,25 @@ export const facebookLogin = (accessToken, userID) => async(dispatch) => {
       }
     })
 
+    dispatch({
+      type: GLOBAL_TYPES.ALERT,
+      payload: {
+        success: res.data.msg
+      }
+    })
+  } catch (err) {
+    dispatch({
+      type: GLOBAL_TYPES.ALERT,
+      payload: {
+        errors: err.response.data.msg
+      }
+    })
+  }
+}
+
+export const changePassword = (passwordData, token) => async(dispatch) => {
+  try {
+    const res = await patchDataAPI('auth/change_password', passwordData, token)
     dispatch({
       type: GLOBAL_TYPES.ALERT,
       payload: {
