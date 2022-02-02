@@ -70,6 +70,21 @@ const authCtrl = {
     } catch (err) {
       return res.status(500).json({msg: err.message})
     }
+  },
+  logout: async(req, res) => {
+    try {
+      res.clearCookie('inspace_rfToken', {
+        path: '/api/v1/auth/refresh_token'
+      })
+
+      await User.findOneAndUpdate({_id: req.user._id}, {
+        rf_token: ''
+      })
+
+      res.status(200).json({msg: 'Logout success.'})
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
   }
 }
 
@@ -88,7 +103,7 @@ const loginUser = async(user, password, res) => {
   const accessToken = generateAccessToken({id: user._id})
   const refreshToken = generateRefreshToken({id: user._id}, res)
 
-  await User.findOne({_id: user._id}, {
+  await User.findOneAndUpdate({_id: user._id}, {
     rf_token: refreshToken
   })
 
