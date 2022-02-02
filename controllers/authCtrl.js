@@ -85,6 +85,38 @@ const authCtrl = {
     } catch (err) {
       return res.status(500).json({msg: err.message})
     }
+  },
+  refreshToken: async(req, res) => {
+    try {
+      const rfToken = req.cookies.inspace_rfToken
+      if (!rfToken)
+        return res.status(400).json({msg: 'Invalid token.'})
+
+      const decoded = jwt.verify(rfToken, process.env.REFRESH_TOKEN_SECRET)
+      if (!decoded.id)
+        return res.status(400).json({msg: 'Invalid token.'})
+
+      const user = await User.findOne({_id: decoded.id}).select('-password +rf_token')
+      if (!user)
+        return res.status(404).json({msg: 'User not found.'})
+
+      if (rfToken !== user.rf_token)
+        return res.status(403).json({msg: 'Invalid authentication.'})
+
+      const accessToken = generateAccessToken({id: user._id})
+      const refreshToken = generateRefreshToken({id: user._id}, res)
+
+      await User.findOneAndUpdate({_id: user._id}, {
+        rf_token: refreshToken
+      })
+
+      res.status(200).json({
+        user,
+        accessToken
+      })
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
   }
 }
 
