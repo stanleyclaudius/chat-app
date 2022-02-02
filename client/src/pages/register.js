@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { BiLock } from 'react-icons/bi'
 import { FaRegUser, FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
@@ -18,8 +18,9 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false)
 
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { alert } = useSelector(state => state)
+  const { auth, alert } = useSelector(state => state)
 
   const handleChange = e => {
     const { name, value } = e.target
@@ -50,6 +51,11 @@ const Register = () => {
       name: '', email: '', password: '', passwordConfirmation: ''
     })
   }
+
+  useEffect(() => {
+    if (auth.user)
+      navigate('/')
+  }, [auth.user, navigate])
 
   return (
     <div className='flex'>

@@ -1,12 +1,30 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { AiOutlineClose } from 'react-icons/ai'
 import { FaRegUser } from 'react-icons/fa'
+import { GLOBAL_TYPES } from './../../redux/types/globalTypes'
+import { forgetPassword } from './../../redux/actions/authActions'
+import { checkEmail } from './../../utils/checkEmail'
+import Loader from './../general/Loader'
 
 const ForgetPasswordModal = ({ openForgetModal, setOpenForgetModal }) => {
   const [email, setEmail] = useState('')
+  const [loading, setLoading] = useState(false)
 
-  const handleSubmit = e => {
+  const dispatch = useDispatch()
+
+  const handleSubmit = async e => {
     e.preventDefault()
+    
+    if (!email)
+      return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: 'Please provide email field.'} })
+    else if (!checkEmail(email))
+      return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: 'Please provide valid email address.'} })
+    
+    setLoading(true)
+    await dispatch(forgetPassword(email))
+    setLoading(false)
+    setEmail('')
   }
 
   return (
@@ -22,7 +40,15 @@ const ForgetPasswordModal = ({ openForgetModal, setOpenForgetModal }) => {
               <FaRegUser className='text-gray-500' />
               <input type='text' placeholder='Email' className='w-full ml-3 outline-0' autoComplete='off' value={email} onChange={e => setEmail(e.target.value)} />
             </div>
-            <button type='submit' className='bg-blue-500 text-white mt-4 rounded-md w-20 h-9 hover:bg-blue-600 float-right'>Submit</button>
+            <button type='submit' className={`${loading ? 'bg-blue-300' : 'bg-blue-500'} text-white mt-4 rounded-md w-20 h-9 ${!loading ? 'hover:bg-blue-600' : undefined} float-right ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`} disabled={loading ? true : false}>
+              {
+                loading
+                ? (
+                  <Loader />
+                )
+                : 'Submit'
+              }
+            </button>
             <div className='clear-both' />
           </form>
         </div>

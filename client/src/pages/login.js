@@ -57,8 +57,6 @@ const Login = () => {
   useEffect(() => {
     if (auth.user)
       navigate('/')
-
-    return () => navigate('/')
   }, [auth.user, navigate])
 
   return (

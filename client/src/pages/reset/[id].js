@@ -1,16 +1,43 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, useParams } from 'react-router-dom'
 import { BiLock } from 'react-icons/bi'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { GLOBAL_TYPES } from './../../redux/types/globalTypes'
+import { resetPassword } from './../../redux/actions/authActions'
+import Loader from './../../components/general/Loader'
 
 const ResetPassword = () => {
+  const { id } = useParams()
+
   const [password, setPassword] = useState('')
   const [passwordConfirmation, setPasswordConfirmation] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false)
 
-  const handleSubmit = e => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const { auth, alert } = useSelector(state => state)
+
+  const handleSubmit = async e => {
     e.preventDefault()
+
+    if (!password)
+      return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: 'Please provide your new password.'} })
+    else if (password.length < 8)
+      return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: 'Password should be at least 8 characters.'} })
+
+    if (password !== passwordConfirmation)
+      return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: 'Password confirmation should be matched.'} })
+
+    await dispatch(resetPassword(id, password))
+    navigate('/')
   }
+
+  useEffect(() => {
+    if (auth.user)
+      navigate('/')
+  }, [auth.user, navigate])
 
   return (
     <div className='flex'>
@@ -39,7 +66,15 @@ const ResetPassword = () => {
               : <FaEye className='text-gray-600 cursor-pointer' onClick={() => setShowPasswordConfirmation(true)} />
             }
           </div>
-          <button className='bg-blue-500 text-white rounded-full w-32 h-10 hover:bg-blue-700 transition-[background]'>Reset Password</button>
+          <button className={`${alert.loading ? 'bg-blue-300' : 'bg-blue-500'} text-white rounded-full w-32 h-10 ${!alert.loading ? 'hover:bg-blue-700' : undefined} transition-[background] ${alert.loading ? 'cursor-not-allowed' : 'cursor-pointer'}`} disabled={alert.loading ? true : false}>
+            {
+              alert.loading
+              ? (
+                <Loader />
+              )
+              : 'Reset Password'
+            }
+          </button>
         </form>
       </div>
       <div className='md:block hidden w-full flex-[2] pointer-events-none'>
