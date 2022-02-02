@@ -117,6 +117,53 @@ const authCtrl = {
     } catch (err) {
       return res.status(500).json({msg: err.message})
     }
+  },
+  forgetPassword: async(req, res) => {
+    try {
+      const { email } = req.body
+      if (!email)
+        return res.status(400).json({msg: 'Please provide your email'})
+
+      const user = await User.findOne({email})
+      if (!user)
+        return res.status(404).json({msg: 'Email not found.'})
+
+      if (user.type !== 'register')
+        return res.status(400).json({msg: `Account that login with ${user.type} can't recover their password in-app.`})
+
+      const accessToken = generateAccessToken({id: user._id})
+      const url = `${process.env.CLIENT_URL}/reset/${accessToken}`
+      sendMail(email, url, 'Reset Password')
+
+      res.status(200).json({msg: 'Password recovery link has been sent to your email.'})
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
+  },
+  resetPassword: async(req, res) => {
+    try {
+      const { token, password } = req.body
+      if (!token)
+        return res.status(400).json({msg: 'Invalid token.'})
+
+      if (!password)
+        return res.status(400).json({msg: 'Please provide your new password.'})
+      else if (password.length < 8)
+        return res.status(400).json({msg: 'Password should be at least 8 characters.'})
+
+      const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+      if (!decoded.id)
+        return res.status(400).json({msg: 'Invalid token.'})
+
+      const passwordHash = await bcrypt.hash(password, 12)
+      await User.findOneAndUpdate({_id: decoded.id}, {
+        password: passwordHash
+      })
+
+      return res.status(200).json({msg: 'Password has been changed.'})
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
   }
 }
 
