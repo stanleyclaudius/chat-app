@@ -3,7 +3,7 @@ import { FaRegUser, FaEye, FaEyeSlash } from 'react-icons/fa'
 import { BiLock } from 'react-icons/bi'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from './../redux/actions/authActions'
+import { login, googleLogin, facebookLogin } from './../redux/actions/authActions'
 import { checkEmail } from './../utils/checkEmail'
 import { GLOBAL_TYPES } from './../redux/types/globalTypes'
 import { GOOGLE_CLIENT_ID, FACEBOOK_APP_ID } from './../utils/constant'
@@ -25,11 +25,13 @@ const Login = () => {
   const { auth, alert } = useSelector(state => state)
 
   const onGoogleSuccess = response => {
-    console.log(response)
+    const { id_token } = response.getAuthResponse()
+    dispatch(googleLogin(id_token))
   }
 
   const onFacebookSuccess = response => {
-    console.log(response)
+    const { accessToken, userID } = response.authResponse
+    dispatch(facebookLogin(accessToken, userID))
   }
 
   const handleChange = e => {

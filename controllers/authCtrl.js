@@ -1,8 +1,12 @@
 const User = require('./../models/User')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const fetch = require('cross-fetch')
 const sendMail = require('./../utils/sendMail')
+const { OAuth2Client } = require('google-auth-library')
 const { generateActivationToken, generateAccessToken, generateRefreshToken } = require('./../utils/generateToken')
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
 const authCtrl = {
   register: async(req, res) => {
@@ -167,6 +171,73 @@ const authCtrl = {
     } catch (err) {
       return res.status(500).json({msg: err.message})
     }
+  },
+  googleLogin: async(req, res) => {
+    try {
+      const { id_token } = req.body
+      if (!id_token)
+        return res.status(400).json({msg: 'Invalid token.'})
+        
+      const verify = await client.verifyIdToken({idToken: id_token, audience: process.env.GOOGLE_CLIENT_ID})
+
+      const { email, email_verified, name, picture } = verify.getPayload()
+
+      if (!email_verified)
+        return res.status(403).json({msg: 'Email hasn\'t been verified yet.'})
+
+      const password = email + '__--d---_YoourUURrrmMEEEmmammMmaiilPasswordddDDDssGooesshhHereer'
+      const passwordHash = await bcrypt.hash(password, 12)
+
+      const user = await User.findOne({email})
+      if (user) {
+        loginUser(user, password, res)
+      } else {
+        const user = {
+          name,
+          email,
+          password: passwordHash,
+          avatar: picture,
+          type: 'google'
+        }
+        registerUser(user, res)
+      }
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
+  },
+  facebookLogin: async(req, res) => {
+    try {
+      const { accessToken, userID } = req.body
+      if (!accessToken || !userID)
+        return res.status(400).json({msg: 'Please provide all required data at request body.'})
+
+      const url = `https://graph.facebook.com/v3.0/${userID}/?fields=id,name,email,picture&access_token=${accessToken}`;
+
+      const data = await fetch(url)
+                          .then(res => res.json())
+                          .then(res => {return res})
+
+      const { email, name, picture } = data
+      
+      const password = email + '___---_YooUUruurFaceeceecbooOOKKKpassPPwssowrdGoeo)-_0e23eseHhehree'
+      const passwordHash = await bcrypt.hash(password, 12)
+
+      const user = await User.findOne({email})
+      if (user) {
+        loginUser(user, password, res)
+      } else {
+        const user = {
+          name,
+          email,
+          password: passwordHash,
+          avatar: picture.data.url,
+          type: 'facebook'
+        }
+        registerUser(user, res)
+      }
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
   }
 }
 
@@ -197,6 +268,29 @@ const loginUser = async(user, password, res) => {
     },
     accessToken
   })
+}
+
+const registerUser = async(user, res) => {
+  try {
+    const newUser = new User(user)
+    
+    const accessToken = generateAccessToken({id: newUser._id})
+    const refreshToken = generateRefreshToken({id: newUser._id}, res)
+
+    newUser.rf_token = refreshToken
+    await newUser.save()
+
+    res.status(200).json({
+      user: {
+        ...newUser._doc,
+        password: ''
+      },
+      accessToken,
+      msg: `Authenticated as ${newUser.name}`
+    })
+  } catch (err) {
+    return res.status(500).json({msg: err.message})
+  }
 }
 
 module.exports = authCtrl
