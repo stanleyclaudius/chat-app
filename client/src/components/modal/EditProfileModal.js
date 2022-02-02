@@ -1,5 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlineClose } from 'react-icons/ai'
+import { GLOBAL_TYPES } from './../../redux/types/globalTypes'
+import { editProfile } from './../../redux/actions/authActions'
+import Loader from './../general/Loader'
 
 const EditProfileModal = ({ openEditProfileModal, setOpenEditProfileModal }) => {
   const [userData, setUserData] = useState({
@@ -7,6 +11,10 @@ const EditProfileModal = ({ openEditProfileModal, setOpenEditProfileModal }) => 
     userId: ''
   })
   const [avatar, setAvatar] = useState()
+  const [loading, setLoading] = useState(false)
+
+  const dispatch = useDispatch()
+  const { auth } = useSelector(state => state)
 
   const handleChangeInput = e => {
     const { name, value } = e.target
@@ -18,9 +26,27 @@ const EditProfileModal = ({ openEditProfileModal, setOpenEditProfileModal }) => 
     setAvatar(file)
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
+
+    if (!userData.name)
+      return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: 'Please provide your name.'} })
+
+    setLoading(true)
+    await dispatch(editProfile(userData, avatar, auth.token))
+    setLoading(false)
+    setAvatar()
+    setOpenEditProfileModal(false)
   }
+
+  useEffect(() => {
+    if (auth.user) {
+      setUserData({
+        name: auth.user?.name,
+        userId: auth.user?.userId
+      })
+    }
+  }, [auth.user])
 
   return (
     <div className={`${openEditProfileModal ? 'opacity-100' : 'opacity-0'} ${openEditProfileModal ? 'pointer-events-auto' : 'pointer-events-none'} transition-opacity fixed top-0 left-0 bottom-0 right-0 flex items-center justify-center bg-[rgba(0,0,0,.6)] p-5 z-[9999]`}>
@@ -33,7 +59,11 @@ const EditProfileModal = ({ openEditProfileModal, setOpenEditProfileModal }) => 
           <form onSubmit={handleSubmit}>
             <div className='mb-6 flex items-start'>
               <div className='flex-1 mr-3 border-2 shadow-lg rounded-md h-28'>
-                <img src={avatar && URL.createObjectURL(avatar)} alt='' className='rounded-md object-cover w-full h-full' />
+                <img
+                  src={avatar ? URL.createObjectURL(avatar) : auth.user?.avatar}
+                  alt={auth.user?.name}
+                  className='rounded-md object-cover w-full h-full' 
+                />
               </div>
               <input type='file' accept='image/*' className='flex-3 border rounded-md outline-0' onChange={handleChangeImage} />
             </div>
@@ -45,7 +75,15 @@ const EditProfileModal = ({ openEditProfileModal, setOpenEditProfileModal }) => 
               <label htmlFor='userId'>User ID</label>
               <input type='text' id='userId' name='userId' className='border border-gray-400 rounded-md w-full h-9 mt-2 outline-0 px-2' autoComplete='off' value={userData.userId} onChange={handleChangeInput} />
             </div>
-            <button type='submit' className='bg-blue-500 hover:bg-blue-600 transition-[background] text-white rounded-md h-9 w-24 float-right text-sm'>Save Changes</button>
+            <button type='submit' className={`${loading ? 'bg-blue-300' : 'bg-blue-500'} ${!loading ? 'hover:bg-blue-600' : undefined} transition-[background] text-white rounded-md h-9 w-24 float-right text-sm ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`} disabled={loading ? true : false}>
+              {
+                loading
+                ? (
+                  <Loader />
+                )
+                : 'Save Changes'
+              }
+            </button>
             <div className='clear-both' />
           </form>
         </div>

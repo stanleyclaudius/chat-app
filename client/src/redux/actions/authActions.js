@@ -1,6 +1,7 @@
 import { GLOBAL_TYPES } from './../types/globalTypes'
 import { patchDataAPI, postDataAPI } from './../../utils/fetchData'
 import { checkTokenValidity } from './../../utils/checkTokenValidity'
+import { uploadImage } from './../../utils/imageHelper'
 
 export const register = userData => async(dispatch) => {
   try {
@@ -241,8 +242,51 @@ export const facebookLogin = (accessToken, userID) => async(dispatch) => {
 }
 
 export const changePassword = (passwordData, token) => async(dispatch) => {
+  const tokenValidityResult = await checkTokenValidity(token, dispatch)
+  const accessToken = tokenValidityResult ? tokenValidityResult : token
+
   try {
-    const res = await patchDataAPI('auth/change_password', passwordData, token)
+    const res = await patchDataAPI('auth/change_password', passwordData, accessToken)
+    dispatch({
+      type: GLOBAL_TYPES.ALERT,
+      payload: {
+        success: res.data.msg
+      }
+    })
+  } catch (err) {
+    dispatch({
+      type: GLOBAL_TYPES.ALERT,
+      payload: {
+        errors: err.response.data.msg
+      }
+    })
+  }
+}
+
+export const editProfile = (userData, avatar, token) => async(dispatch) => {
+  const tokenValidityResult = await checkTokenValidity(token, dispatch)
+  const accessToken = tokenValidityResult ? tokenValidityResult : token
+
+  try {
+    let imgLink = ''
+    if (avatar) {
+      imgLink = await uploadImage([avatar], 'avatar')
+    }
+    
+    const newData = {
+      ...userData,
+      avatar: avatar ? imgLink[0] : ''
+    }
+
+    const res = await patchDataAPI('auth/edit_profile', newData, accessToken)
+    dispatch({
+      type: GLOBAL_TYPES.AUTH,
+      payload: {
+        user: res.data.user,
+        token: accessToken
+      }
+    })
+
     dispatch({
       type: GLOBAL_TYPES.ALERT,
       payload: {

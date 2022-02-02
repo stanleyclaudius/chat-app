@@ -267,6 +267,36 @@ const authCtrl = {
     } catch (err) {
       return res.status(500).json({msg: err.message})
     }
+  },
+  editProfile: async(req, res) => {
+    try {
+      const { name, userId, avatar } = req.body
+      if (!name)
+        return res.status(400).json({msg: 'Please provide your name.'})
+
+      const validUserId = await User.findOne({userId})
+      if (validUserId)
+        return res.status(400).json({msg: 'This ID has been taken before.'})
+
+      const newUser = await User.findOneAndUpdate({_id: req.user._id}, {
+        name,
+        userId: userId ? userId : req.user._id,
+        avatar: avatar ? avatar : req.user.avatar
+      }, {new: true})
+
+      if (!newUser)
+        return res.status(404).json({msg: 'User not found.'})
+
+      return res.status(200).json({
+        msg: 'Profile has been updated successfully.',
+        user: {
+          ...newUser._doc,
+          password: ''
+        }
+      })
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
   }
 }
 

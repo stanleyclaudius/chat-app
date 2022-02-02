@@ -13,5 +13,6 @@ router.route('/reset_password').post(authCtrl.resetPassword)
 router.route('/google_login').post(authCtrl.googleLogin)
 router.route('/facebook_login').post(authCtrl.facebookLogin)
 router.route('/change_password').patch(isAuthenticated, authCtrl.changePassword)
+router.route('/edit_profile').patch(isAuthenticated, authCtrl.editProfile)
 
 module.exports = router
