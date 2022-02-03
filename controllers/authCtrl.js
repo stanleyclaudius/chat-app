@@ -274,7 +274,7 @@ const authCtrl = {
       if (!name)
         return res.status(400).json({msg: 'Please provide your name.'})
 
-      const validUserId = await User.findOne({userId})
+      const validUserId = await User.findOne({'_id': {$ne: req.user._id}, userId})
       if (validUserId)
         return res.status(400).json({msg: 'This ID has been taken before.'})
 
