@@ -1,13 +1,35 @@
 import { useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 import { FaRegUser } from 'react-icons/fa'
+import { useDispatch, useSelector } from 'react-redux'
+import { getDataAPI } from './../../utils/fetchData'
+import { GLOBAL_TYPES } from './../../redux/types/globalTypes'
 import Avatar from './../general/Avatar'
+import Loader from './../general/Loader'
 
 const SearchPeopleModal = ({ openSearchPeopleModal, setOpenSearchPeopleModal }) => {
   const [userId, setUserId] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState({})
 
-  const handleSubmit = e => {
+  const dispatch = useDispatch()
+  const { auth } = useSelector(state => state)
+
+  const handleSubmit = async e => {
     e.preventDefault()
+    if (!userId) {
+      setResult({})
+      return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: 'Please provide User ID.'} })
+    }
+
+    setLoading(true)
+    await getDataAPI(`user/id/${userId}`, auth.token)
+      .then(res => setResult(res.data))
+      .catch(err => {
+        setResult({})
+        return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: err.response.data.msg} })
+      })
+    setLoading(false)
   }
 
   return (
@@ -23,17 +45,29 @@ const SearchPeopleModal = ({ openSearchPeopleModal, setOpenSearchPeopleModal }) 
               <FaRegUser className='text-gray-500 mr-3' />
               <input type='text' placeholder='User ID' autoComplete='off' value={userId} onChange={e => setUserId(e.target.value)} className='w-full outline-0' />
             </div>
-            <button type='submit' className='bg-blue-500 mt-4 hover:bg-blue-600 transition-[background] w-20 h-9 text-white rounded-md float-right'>Search</button>
+            <button type='submit' className={`${loading ? 'bg-blue-300' : 'bg-blue-500'} mt-4 ${!loading ? 'hover:bg-blue-600' : undefined} transition-[background] w-20 h-9 text-white rounded-md float-right ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`} disabled={loading ? true : false}>
+              {
+                loading
+                ? <Loader />
+                : 'Search'
+              }
+            </button>
             <div className='clear-both' />
           </form>
-
-          <div className='text-center border-2 shadow-lg w-fit m-auto rounded-md p-4 mt-6'>
-            <div className='flex justify-center'>
-              <Avatar />
+          
+          {
+            Object.keys(result).length > 0 &&
+            <div className='text-center border-2 shadow-lg w-fit m-auto rounded-md p-4 mt-6'>
+              <div className='flex justify-center'>
+                <Avatar src={result?.avatar} alt={result?.name} />
+              </div>
+              <h1 className='text-lg my-3'>{result?.name}</h1>
+              {
+                result?._id !== auth.user?._id &&
+                <button className='bg-blue-500 hover:bg-blue-600 text-sm transition-[background] w-20 h-8 text-white rounded-md'>Add Friend</button>
+              }
             </div>
-            <h1 className='text-lg my-3'>Lorem Ipsum</h1>
-            <button className='bg-blue-500 hover:bg-blue-600 text-sm transition-[background] w-20 h-8 text-white rounded-md'>Add Friend</button>
-          </div>
+          }
         </div>
       </div>
     </div>
