@@ -30,9 +30,19 @@ const userSchema = new mongoose.Schema({
   rf_token: {
     type: String,
     select: false
-  }
+  },
+  friends: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'user'
+    }
+  ]
 }, {
   timestamps: true
 })
 
-module.exports = mongoose.model('user', userSchema)
+userSchema.index({ userId: 'text' })
+const users = mongoose.model('user', userSchema)
+users.createIndexes({ userId: 'text' })
+
+module.exports = users
