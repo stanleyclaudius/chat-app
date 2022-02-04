@@ -2,14 +2,16 @@ import { useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 import { FaRegUser } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
-import { getDataAPI } from './../../utils/fetchData'
+import { getDataAPI, patchDataAPI } from './../../utils/fetchData'
 import { GLOBAL_TYPES } from './../../redux/types/globalTypes'
+import { checkTokenValidity } from './../../utils/checkTokenValidity'
 import Avatar from './../general/Avatar'
 import Loader from './../general/Loader'
 
 const SearchPeopleModal = ({ openSearchPeopleModal, setOpenSearchPeopleModal }) => {
   const [userId, setUserId] = useState('')
   const [loading, setLoading] = useState(false)
+  const [loadingAddFriend, setLoadingAddFriend] = useState(false)
   const [result, setResult] = useState({})
 
   const dispatch = useDispatch()
@@ -22,14 +24,34 @@ const SearchPeopleModal = ({ openSearchPeopleModal, setOpenSearchPeopleModal }) 
       return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: 'Please provide User ID.'} })
     }
 
+    const tokenValidityResult = await checkTokenValidity(auth.token, dispatch)
+    const accessToken = tokenValidityResult ? tokenValidityResult : auth.token
+
     setLoading(true)
-    await getDataAPI(`user/id/${userId}`, auth.token)
+    await getDataAPI(`user/id/${userId}`, accessToken)
       .then(res => setResult(res.data))
       .catch(err => {
         setResult({})
         return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: err.response.data.msg} })
       })
     setLoading(false)
+  }
+
+  const addFriend = async id => {
+    setLoadingAddFriend(true)
+
+    const tokenValidityResult = await checkTokenValidity(auth.token, dispatch)
+    const accessToken = tokenValidityResult ? tokenValidityResult : auth.token
+
+    await patchDataAPI(`user/add/${id}`, {}, accessToken)
+      .then(res => {
+        dispatch({ type: GLOBAL_TYPES.ALERT, payload: {success: res.data.msg} })
+        setResult({})
+        setUserId('')
+        setOpenSearchPeopleModal(false)
+      })
+      .catch(err => dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: err.response.data.msg} }))
+    setLoadingAddFriend(false)
   }
 
   return (
@@ -64,7 +86,13 @@ const SearchPeopleModal = ({ openSearchPeopleModal, setOpenSearchPeopleModal }) 
               <h1 className='text-lg my-3'>{result?.name}</h1>
               {
                 result?._id !== auth.user?._id &&
-                <button className='bg-blue-500 hover:bg-blue-600 text-sm transition-[background] w-20 h-8 text-white rounded-md'>Add Friend</button>
+                <button className={`${loadingAddFriend ? 'bg-blue-300' : 'bg-blue-500'} ${!loadingAddFriend ? 'hover:bg-blue-600' : undefined} ${loading ? 'cursor-not-allowed' : 'cursor-pointer'} text-sm transition-[background] w-20 h-8 text-white rounded-md`} disabled={loadingAddFriend ? true : false} onClick={() => addFriend(result?.userId)}>
+                  {
+                    loadingAddFriend
+                    ? <Loader />
+                    : 'Add Friend'
+                  }
+                </button>
               }
             </div>
           }

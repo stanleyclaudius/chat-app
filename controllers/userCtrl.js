@@ -18,6 +18,23 @@ const userCtrl = {
     } catch (err) {
       return res.status(500).json({msg: err.message})
     }
+  },
+  addFriend: async(req, res) => {
+    try {
+      const { id } = req.params
+      console.log(id)
+      const user = await User.findOne({userId: id})
+      if (!user)
+        return res.status(404).json({msg: 'User not found.'})
+
+      await User.findOneAndUpdate({_id: req.user._id}, {
+        $push: { friends: user._id }
+      })
+
+      return res.status(200).json({msg: `Successfully added ${user.name} as friend.`})
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
   }
 }
 
