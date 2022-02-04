@@ -31,7 +31,15 @@ const userCtrl = {
         $push: { friends: user._id }
       })
 
-      return res.status(200).json({msg: `Successfully added ${user.name} as friend.`})
+      return res.status(200).json({
+        user: {
+          name: user.name,
+          avatar: user.avatar,
+          userId: user.userId,
+          _id: user._id
+        },
+        msg: `Successfully added ${user.name} as friend.`
+      })
     } catch (err) {
       return res.status(500).json({msg: err.message})
     }

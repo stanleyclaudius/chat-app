@@ -66,7 +66,7 @@ const authCtrl = {
       if (!password)
         return res.status(400).json({msg: 'Please provide your password.'})
 
-      const user = await User.findOne({email})
+      const user = await User.findOne({email}).populate('friends', 'avatar name userId')
       if (!user)
         return res.status(404).json({msg: 'Invalid credential.'})
 
@@ -100,7 +100,7 @@ const authCtrl = {
       if (!decoded.id)
         return res.status(400).json({msg: 'Invalid token.'})
 
-      const user = await User.findOne({_id: decoded.id}).select('-password +rf_token')
+      const user = await User.findOne({_id: decoded.id}).select('-password +rf_token').populate('friends', 'avatar name userId')
       if (!user)
         return res.status(404).json({msg: 'User not found.'})
 
@@ -188,7 +188,7 @@ const authCtrl = {
       const password = email + '__--d---_YoourUURrrmMEEEmmammMmaiilPasswordddDDDssGooesshhHereer'
       const passwordHash = await bcrypt.hash(password, 12)
 
-      const user = await User.findOne({email})
+      const user = await User.findOne({email}).populate('friends', 'avatar name userId')
       if (user) {
         loginUser(user, password, res)
       } else {
@@ -222,7 +222,7 @@ const authCtrl = {
       const password = email + '___---_YooUUruurFaceeceecbooOOKKKpassPPwssowrdGoeo)-_0e23eseHhehree'
       const passwordHash = await bcrypt.hash(password, 12)
 
-      const user = await User.findOne({email})
+      const user = await User.findOne({email}).populate('friends', 'avatar name userId')
       if (user) {
         loginUser(user, password, res)
       } else {
@@ -336,6 +336,7 @@ const registerUser = async(user, res) => {
     const accessToken = generateAccessToken({id: newUser._id})
     const refreshToken = generateRefreshToken({id: newUser._id}, res)
 
+    newUser.userId = newUser._id
     newUser.rf_token = refreshToken
     await newUser.save()
 

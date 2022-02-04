@@ -38,14 +38,31 @@ const SearchPeopleModal = ({ openSearchPeopleModal, setOpenSearchPeopleModal }) 
   }
 
   const addFriend = async id => {
-    setLoadingAddFriend(true)
-
     const tokenValidityResult = await checkTokenValidity(auth.token, dispatch)
     const accessToken = tokenValidityResult ? tokenValidityResult : auth.token
-
+    
+    setLoadingAddFriend(true)
     await patchDataAPI(`user/add/${id}`, {}, accessToken)
       .then(res => {
         dispatch({ type: GLOBAL_TYPES.ALERT, payload: {success: res.data.msg} })
+        dispatch({
+          type: GLOBAL_TYPES.AUTH,
+          payload: {
+            user: {
+              ...auth.user,
+              friends: [
+                {
+                  _id: res.data.user._id,
+                  name: res.data.user.name,
+                  avatar: res.data.user.avatar,
+                  userId: res.data.user.userId
+                },
+                ...auth.user?.friends
+              ]
+            },
+            token: accessToken
+          }
+        })
         setResult({})
         setUserId('')
         setOpenSearchPeopleModal(false)
