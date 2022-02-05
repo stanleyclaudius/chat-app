@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const User = require('./../models/User')
 
 const userCtrl = {
@@ -40,6 +41,34 @@ const userCtrl = {
         },
         msg: `Successfully added ${user.name} as friend.`
       })
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
+  },
+  searchFriend: async(req, res) => {
+    try {
+      const currUser = await User.findOne({_id: req.user._id})
+
+      const user = await User.aggregate([
+        {
+          $search: {
+            index: 'user',
+            autocomplete: {
+              "query": req.query.name,
+              "path": "name"
+            }
+          }
+        }
+      ])
+
+      const trueUser = []
+      for (let u of user) {
+        if (currUser.friends.includes(u._id)) {
+          trueUser.push(u)
+        }
+      }
+
+      return res.status(200).json({user: trueUser})
     } catch (err) {
       return res.status(500).json({msg: err.message})
     }

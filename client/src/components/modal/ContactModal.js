@@ -1,14 +1,35 @@
-import { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useState, useEffect, useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai'
+import { getDataAPI } from './../../utils/fetchData'
+import { checkTokenValidity } from './../../utils/checkTokenValidity'
 import PersonCard from './../general/PersonCard'
 
 const ContactModal = ({ openContactListModal, setOpenContactListModal }) => {
+  const [search, setSearch] = useState('')
   const [friendList, setFriendList] = useState([])
+
+  const dispatch = useDispatch()
   const { auth } = useSelector(state => state)
 
+  const searchFriend = useCallback(async () => {
+    const tokenValidityResult = await checkTokenValidity(auth.token, dispatch)
+    const accessToken = tokenValidityResult ? tokenValidityResult : auth.token
+
+    await getDataAPI(`user/search?name=${search}`, accessToken)
+      .then(res => setFriendList(res.data.user))
+      .catch(err => console.log(err.response.data.msg))
+  }, [search, auth.token, dispatch])
+
   useEffect(() => {
-    setFriendList(auth.user?.friends.reverse())
+    if (search.length > 3)
+      searchFriend()
+    else
+      setFriendList(auth.user?.friends)
+  }, [searchFriend, auth.user, search])
+
+  useEffect(() => {
+    setFriendList(auth.user?.friends)
   }, [auth.user])
 
   return (
@@ -20,17 +41,27 @@ const ContactModal = ({ openContactListModal, setOpenContactListModal }) => {
         </div>
         <div className='py-5 px-5'>
           <div className='flex items-center justify-between border border-gray-500 w-fit rounded-md p-2 md:w-[400px] w-[100%] float-right'>
-            <input type='text' placeholder='Search contact ...' autoComplete='off' className='outline-0 w-full pr-2' />
+            <input type='text' placeholder='Search contact ...' autoComplete='off' className='outline-0 w-full pr-2' value={search} onChange={e => setSearch(e.target.value)} />
             <AiOutlineSearch className='text-gray-500 text-lg' />
           </div>
           <div className="clear-both"></div>
-          <div className='mt-6 grid grid-cols-auto-fill gap-5'>
-            {
-              friendList.map(friend => (
-                <PersonCard key={friend._id} avatar={friend.avatar} name={friend.name} />
-              ))
-            }
-          </div>
+          {
+            friendList.length === 0
+            ? (
+              <div className='bg-red-400 text-white rounded-md p-2 text-center mt-6'>
+                Friend not found
+              </div>
+            )
+            : (
+              <div className='mt-6 grid grid-cols-auto-fill gap-5'>
+                {
+                  friendList.map(friend => (
+                    <PersonCard key={friend._id} avatar={friend.avatar} name={friend.name} />
+                  ))
+                }
+              </div>
+            )
+          }
         </div>
       </div>
     </div>
