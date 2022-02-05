@@ -17,7 +17,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (selectContact)
-      dispatch(getMessages(selectContact, auth.token))
+      dispatch(getMessages(selectContact._id, auth.token))
     else
       dispatch({ type: MESSAGE_TYPES.CLEAR_MESSAGE })
   }, [selectContact, auth.token, dispatch])
@@ -40,7 +40,7 @@ const Dashboard = () => {
             ? (
               <>
                 <MessageContainer messages={message} />
-                <ChatInput />
+                <ChatInput selectContact={selectContact} />
               </>
             )
             : (

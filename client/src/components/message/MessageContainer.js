@@ -7,12 +7,13 @@ const MessageContainer = ({messages}) => {
   return (
     <div className='flex-1 px-5 py-7 overflow-auto message-container'>
       {
-        messages.map(item => (
+        messages.map((item, idx) => (
           <Message
-            key={item._id}
+            key={idx}
             type={item.sender._id === auth.user?._id ? 'sender' : 'receiver'}
+            recipientAvatar={item.sender?.avatar}
             message={item.text}
-            timestamp={new Date(item.createdAt).toLocaleDateString}
+            timestamp={new Date(item.createdAt).toLocaleString()}
           />
         ))
       }

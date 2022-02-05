@@ -49,9 +49,19 @@ export const createMessage = (chatData, token) => async(dispatch) => {
   const accessToken = tokenValidity ? tokenValidity : token
 
   try {
-    await postDataAPI('message', chatData, accessToken)
+    await postDataAPI('message', {
+      ...chatData,
+      sender: chatData.sender._id,
+      recipient: chatData.recipient._id
+    }, accessToken)
+
     dispatch({
       type: MESSAGE_TYPES.CREATE_MESSAGE,
+      payload: chatData
+    })
+
+    dispatch({
+      type: CONVERSATION_TYPES.UPDATE_CONVERSATION,
       payload: chatData
     })
   } catch (err) {
