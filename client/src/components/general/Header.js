@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { IoChevronBackOutline } from 'react-icons/io5'
@@ -21,6 +21,7 @@ const Header = ({ selectContact, setSelectContact }) => {
   const [openSearchPeopleModal, setOpenSearchPeopleModal] = useState(false)
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false)
   const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false)
+  const [notFriend, setNotFriend] = useState(false)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -30,6 +31,14 @@ const Header = ({ selectContact, setSelectContact }) => {
     await dispatch(logout(auth.token))
     navigate('/')
   }
+
+  useEffect(() => {
+    if (selectContact) {
+      const findUser = auth.user?.friends.find(item => item._id === selectContact._id)
+      if (!findUser)
+        setNotFriend(true)
+    }
+  }, [selectContact, auth.user?.friends])
 
   return (
     <>
@@ -43,7 +52,7 @@ const Header = ({ selectContact, setSelectContact }) => {
           <div className='text-center'>
             <div className='flex items-center'>
               {selectContact && <IoChevronBackOutline className='md:hidden block translate-y-[2px] cursor-pointer' onClick={() => setSelectContact(false)} />}
-              <h2 className='text-lg font-medium ml-2'>Lorem Ipsum</h2>
+              <h2 className='text-lg font-medium ml-2'>{selectContact.name} {notFriend && '(Not Friend)'}</h2>
             </div>
             <div className='flex items-center mt-1'>
               <p>Message</p>

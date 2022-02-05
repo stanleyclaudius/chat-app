@@ -44,9 +44,11 @@ export const getMessages = (id, token) => async(dispatch) => {
   }
 }
 
-export const createMessage = (chatData, token) => async(dispatch) => {
+export const createMessage = (chatData, token, socket) => async(dispatch) => {
   const tokenValidity = await checkTokenValidity(token, dispatch)
   const accessToken = tokenValidity ? tokenValidity : token
+
+  socket.emit('createMessage', chatData)
 
   try {
     await postDataAPI('message', {

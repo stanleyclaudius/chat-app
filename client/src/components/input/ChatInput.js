@@ -10,7 +10,7 @@ const ChatInput = ({ selectContact }) => {
   const [message, setMessage] = useState('')
 
   const dispatch = useDispatch()
-  const { auth } = useSelector(state => state)
+  const { auth, socket } = useSelector(state => state)
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -23,7 +23,7 @@ const ChatInput = ({ selectContact }) => {
       createdAt: new Date().toISOString()
     }
 
-    dispatch(createMessage(chatData, auth.token))
+    dispatch(createMessage(chatData, auth.token, socket))
     setMessage('')
   }
   

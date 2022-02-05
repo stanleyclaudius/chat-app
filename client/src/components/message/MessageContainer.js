@@ -1,11 +1,23 @@
+import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import Message from './Message'
 
 const MessageContainer = ({messages}) => {
   const { auth } = useSelector(state => state)
 
+  const messageContainerRef = useRef()
+
+  useEffect(() => {
+    if (messageContainerRef) {
+      messageContainerRef.current.addEventListener('DOMNodeInserted', e => {
+        const { currentTarget: target } = e
+        target.scroll({ top: target.scrollHeight, behavior: 'smooth' })
+      })
+    }
+  })
+
   return (
-    <div className='flex-1 px-5 py-7 overflow-auto message-container'>
+    <div className='flex-1 px-5 py-7 overflow-auto message-container' ref={messageContainerRef}>
       {
         messages.map((item, idx) => (
           <Message
