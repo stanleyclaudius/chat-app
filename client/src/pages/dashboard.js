@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AiOutlineWechat } from 'react-icons/ai'
+import { useDispatch, useSelector } from 'react-redux'
+import { getConversation } from './../redux/actions/messageActions'
 import ChatInput from './../components/input/ChatInput'
 import SearchForm from './../components/input/SearchForm'
 import MessageContainer from '../components/message/MessageContainer'
@@ -8,6 +10,13 @@ import Header from './../components/general/Header'
 
 const Dashboard = () => {
   const [selectContact, setSelectContact] = useState(false)
+
+  const dispatch = useDispatch()
+  const { auth } = useSelector(state => state)
+
+  useEffect(() => {
+    dispatch(getConversation(auth.token))
+  }, [dispatch, auth.token])
 
   return (
     <>

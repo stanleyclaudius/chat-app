@@ -19,6 +19,7 @@ app.use(morgan('dev'))
 
 app.use('/api/v1/auth', require('./routes/auth.route'))
 app.use('/api/v1/user', require('./routes/user.route'))
+app.use('/api/v1/message', require('./routes/message.route'))
 
 connectDB()
 app.listen(process.env.PORT, () => console.log(`Server is running on PORT ${process.env.PORT}.`))
