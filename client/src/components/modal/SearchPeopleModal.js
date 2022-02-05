@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
 import { FaRegUser } from 'react-icons/fa'
 import { useDispatch, useSelector } from 'react-redux'
@@ -13,6 +13,7 @@ const SearchPeopleModal = ({ openSearchPeopleModal, setOpenSearchPeopleModal }) 
   const [loading, setLoading] = useState(false)
   const [loadingAddFriend, setLoadingAddFriend] = useState(false)
   const [result, setResult] = useState({})
+  const [isFriend, setIsFriend] = useState(false)
 
   const dispatch = useDispatch()
   const { auth } = useSelector(state => state)
@@ -71,6 +72,14 @@ const SearchPeopleModal = ({ openSearchPeopleModal, setOpenSearchPeopleModal }) 
     setLoadingAddFriend(false)
   }
 
+  useEffect(() => {
+    if (Object.keys(result).length > 0) {
+      const findUser = auth.user?.friends.find(item => item._id === result._id)
+      if (findUser)
+        setIsFriend(true)
+    }
+  }, [result, auth.user?.friends])
+
   return (
     <div className={`${openSearchPeopleModal ? 'opacity-100' : 'opacity-0'} ${openSearchPeopleModal ? 'pointer-events-auto' : 'pointer-events-none'} transition-opacity fixed top-0 left-0 bottom-0 right-0 bg-[rgba(0,0,0,.6)] flex items-center justify-center p-5 z-[9999]`}>
       <div className={`${openSearchPeopleModal ? 'translate-y-0' : '-translate-y-12'} transition-transform w-full max-w-[400px] bg-white rounded-md`}>
@@ -107,7 +116,7 @@ const SearchPeopleModal = ({ openSearchPeopleModal, setOpenSearchPeopleModal }) 
                   {
                     loadingAddFriend
                     ? <Loader />
-                    : 'Add Friend'
+                    : isFriend ? 'Chat' : 'Add Friend'
                   }
                 </button>
               }
