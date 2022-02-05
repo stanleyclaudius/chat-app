@@ -5,4 +5,6 @@ const { isAuthenticated } = require('./../middlewares/auth')
 router.route('/').post(isAuthenticated, messageCtrl.createMessage)
 router.route('/conversation').get(isAuthenticated, messageCtrl.getConversation)
 
+router.route('/:id').get(isAuthenticated, messageCtrl.getMessage)
+
 module.exports = router

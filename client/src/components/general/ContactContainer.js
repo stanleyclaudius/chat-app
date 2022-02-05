@@ -1,19 +1,19 @@
 import ContactCard from './ContactCard'
 
-const ContactContainer = ({ setSelectContact }) => {
+const ContactContainer = ({ conversation, setSelectContact }) => {
   return (
     <div className='md:h-[83vh] h-[85vh] overflow-auto contact-container'>
-      <ContactCard setSelectContact={setSelectContact} />
-      <ContactCard />
-      <ContactCard />
-      <ContactCard />
-      <ContactCard />
-      <ContactCard />
-      <ContactCard />
-      <ContactCard />
-      <ContactCard />
-      <ContactCard />
-      <ContactCard />
+      {
+        conversation.map(item => (
+          <ContactCard
+            key={item._id}
+            text={item.text}
+            user={item.recipients[1]}
+            date={item.createdAt}
+            setSelectContact={setSelectContact}
+          />
+        ))
+      }
     </div>
   )
 }

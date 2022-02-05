@@ -1,17 +1,11 @@
 import { MESSAGE_TYPES } from './../types//messageTypes'
 
-const initialState = {
-  users: [],
-  data: []
-}
-
-const messageReducer = (state = initialState, action) => {
+const messageReducer = (state = [], action) => {
   switch (action.type) {
-    case MESSAGE_TYPES.GET_CONVERSATION:
-      return {
-        ...state,
-        users: action.payload
-      }
+    case MESSAGE_TYPES.GET_MESSAGE:
+      return action.payload
+    case MESSAGE_TYPES.CLEAR_MESSAGE:
+      return []
     default:
       return state
   }

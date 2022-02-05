@@ -37,6 +37,20 @@ const messageCtrl = {
     } catch (err) {
       return res.status(500).json({msg: err.message})
     }
+  },
+  getMessage: async(req, res) => {
+    try {
+      const messages = await Message.find({
+        $or: [
+          { sender: req.user._id, recipient: req.params.id },
+          { sender: req.params.id, recipient: req.user._id }
+        ]
+      }).populate('sender recipient', 'avatar name')
+
+      return res.status(200).json({messages})
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
   }
 }
 

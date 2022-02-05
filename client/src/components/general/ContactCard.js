@@ -1,14 +1,14 @@
 import Avatar from './Avatar'
 
-const ContactCard = ({ setSelectContact }) => {
+const ContactCard = ({ text, user, date, setSelectContact }) => {
   return (
-    <div className='flex items-center p-4 border-b-2 cursor-pointer hover:bg-gray-100 transition-[background]' onClick={() => setSelectContact(true)}>
-      <Avatar />
+    <div className='flex items-center p-4 border-b-2 cursor-pointer hover:bg-gray-100 transition-[background]' onClick={() => setSelectContact(user._id)}>
+      <Avatar src={user.avatar} alt={user.name} />
       <div className='w-full ml-4'>
-        <p className='text-lg mb-1'>Lorem Ipsum</p>
+        <p className='text-lg mb-1'>{user.name}</p>
         <div className='flex items-center justify-between'>
-          <p className='text-sm'>Last message goes here</p>
-          <p className='text-sm text-gray-500'>15:20</p>
+          <p className='text-sm'>{text}</p>
+          <p className='text-sm text-gray-500'>{new Date(date).toLocaleTimeString()}</p>
         </div>
       </div>
     </div>

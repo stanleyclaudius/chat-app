@@ -1,58 +1,21 @@
+import { useSelector } from 'react-redux'
 import Message from './Message'
 
-const MessageContainer = () => {
+const MessageContainer = ({messages}) => {
+  const { auth } = useSelector(state => state)
+
   return (
     <div className='flex-1 px-5 py-7 overflow-auto message-container'>
-      <Message
-        type='sender'
-        message='hellohellohellohellohellohellohellohellohello'
-        timestamp='30/01/2022; 3:01PM'
-      />
-      <Message
-        type='receiver'
-        message='hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello'
-        timestamp='30/01/2022; 3:01PM'
-      />
-      <Message
-        type='sender'
-        message='hellohellohellohellohellohellohellohellohello'
-        timestamp='30/01/2022; 3:01PM'
-      />
-      <Message
-        type='receiver'
-        message='hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello'
-        timestamp='30/01/2022; 3:01PM'
-      />
-      <Message
-        type='sender'
-        message='hellohellohellohellohellohellohellohellohello'
-        timestamp='30/01/2022; 3:01PM'
-      />
-      <Message
-        type='receiver'
-        message='hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello'
-        timestamp='30/01/2022; 3:01PM'
-      />
-      <Message
-        type='sender'
-        message='hellohellohellohellohellohellohellohellohello'
-        timestamp='30/01/2022; 3:01PM'
-      />
-      <Message
-        type='receiver'
-        message='hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello'
-        timestamp='30/01/2022; 3:01PM'
-      />
-      <Message
-        type='sender'
-        message='hellohellohellohellohellohellohellohellohello'
-        timestamp='30/01/2022; 3:01PM'
-      />
-      <Message
-        type='receiver'
-        message='hellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohellohello'
-        timestamp='30/01/2022; 3:01PM'
-      />
+      {
+        messages.map(item => (
+          <Message
+            key={item._id}
+            type={item.sender._id === auth.user?._id ? 'sender' : 'receiver'}
+            message={item.text}
+            timestamp={new Date(item.createdAt).toLocaleDateString}
+          />
+        ))
+      }
     </div>
   )
 }
