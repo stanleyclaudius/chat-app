@@ -96,7 +96,7 @@ const Header = ({ selectContact, setSelectContact }) => {
         </div>
       </div>
 
-      <ContactModal openContactListModal={openContactListModal} setOpenContactListModal={setOpenContactListModal} />
+      <ContactModal openContactListModal={openContactListModal} setOpenContactListModal={setOpenContactListModal} setSelectContact={setSelectContact} />
       <SearchPeopleModal openSearchPeopleModal={openSearchPeopleModal} setOpenSearchPeopleModal={setOpenSearchPeopleModal} />
       <EditProfileModal openEditProfileModal={openEditProfileModal} setOpenEditProfileModal={setOpenEditProfileModal} />
       <ChangePasswordModal openChangePasswordModal={openChangePasswordModal} setOpenChangePasswordModal={setOpenChangePasswordModal} />

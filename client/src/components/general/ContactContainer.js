@@ -7,9 +7,9 @@ const ContactContainer = ({ conversation, setSelectContact }) => {
   return (
     <div className='md:h-[83vh] h-[85vh] overflow-auto contact-container'>
       {
-        conversation.map(item => (
+        conversation.map((item, idx) => (
           <ContactCard
-            key={item._id}
+            key={idx}
             text={item.text}
             user={item.recipients[0]._id === auth.user?._id ? item.recipients[1] : item.recipients[0]}
             date={item.createdAt}

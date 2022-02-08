@@ -6,10 +6,13 @@ const ContactCard = ({ text, user, date, setSelectContact }) => {
       <Avatar src={user.avatar} alt={user.name} />
       <div className='w-full ml-4'>
         <p className='text-lg mb-1'>{user.name}</p>
-        <div className='flex items-center justify-between'>
-          <p className='text-sm'>{text}</p>
-          <p className='text-sm text-gray-500'>{new Date(date).toLocaleTimeString()}</p>
-        </div>
+        {
+          (text && date) &&
+          <div className='flex items-center justify-between'>
+            <p className='text-sm'>{text}</p>
+            <p className='text-sm text-gray-500'>{new Date(date).toLocaleTimeString()}</p>
+          </div>
+        }
       </div>
     </div>
   )

@@ -5,7 +5,7 @@ import { getDataAPI } from './../../utils/fetchData'
 import { checkTokenValidity } from './../../utils/checkTokenValidity'
 import PersonCard from './../general/PersonCard'
 
-const ContactModal = ({ openContactListModal, setOpenContactListModal }) => {
+const ContactModal = ({ openContactListModal, setOpenContactListModal, setSelectContact }) => {
   const [search, setSearch] = useState('')
   const [friendList, setFriendList] = useState([])
 
@@ -56,7 +56,7 @@ const ContactModal = ({ openContactListModal, setOpenContactListModal }) => {
               <div className='mt-6 grid grid-cols-auto-fill gap-5'>
                 {
                   friendList.map(friend => (
-                    <PersonCard key={friend._id} avatar={friend.avatar} name={friend.name} />
+                    <PersonCard key={friend._id} id={friend._id}avatar={friend.avatar} name={friend.name} setOpenContactListModal={setOpenContactListModal} setSelectContact={setSelectContact} />
                   ))
                 }
               </div>

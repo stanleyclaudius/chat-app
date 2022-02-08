@@ -13,6 +13,23 @@ const SocketClient = () => {
 
   useEffect(() => {
     socket.on('createMessageToClient', data => {
+      const addConversationData = {
+        senderId: data.sender._id,
+        senderName: data.sender.name,
+        senderAvatar: data.sender.avatar,
+        recipientId: data.recipient._id,
+        recipientName: data.recipient.name,
+        recipientAvatar: data.recipient.avatar,
+        media: data.media,
+        createdAt: data.createdAt,
+        text: data.text
+      }
+
+      dispatch({
+        type: CONVERSATION_TYPES.ADD_CONVERSATION,
+        payload: addConversationData
+      })
+
       dispatch({
         type: MESSAGE_TYPES.CREATE_MESSAGE,
         payload: data
