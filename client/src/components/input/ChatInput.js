@@ -25,6 +25,9 @@ const ChatInput = ({ selectContact }) => {
 
     if (!message && images.length === 0) return
 
+    setMessage('')
+    setImages([])
+
     let newImages = []
     if (images.length > 0) {
       newImages = await uploadImage(images, 'chat')
@@ -39,8 +42,6 @@ const ChatInput = ({ selectContact }) => {
     }
 
     dispatch(createMessage(chatData, auth.token, socket))
-    setMessage('')
-    setImages([])
   }
   
   return (
