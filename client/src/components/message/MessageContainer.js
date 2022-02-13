@@ -25,6 +25,7 @@ const MessageContainer = ({messages}) => {
             type={item.sender._id === auth.user?._id ? 'sender' : 'receiver'}
             recipientAvatar={item.sender?.avatar}
             message={item.text}
+            media={item.media}
             timestamp={new Date(item.createdAt).toLocaleString()}
           />
         ))

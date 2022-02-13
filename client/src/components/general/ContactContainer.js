@@ -11,6 +11,7 @@ const ContactContainer = ({ conversation, setSelectContact }) => {
           <ContactCard
             key={idx}
             text={item.text}
+            media={item.media}
             user={item.recipients[0]._id === auth.user?._id ? item.recipients[1] : item.recipients[0]}
             date={item.createdAt}
             setSelectContact={setSelectContact}
