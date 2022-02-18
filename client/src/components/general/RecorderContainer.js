@@ -60,6 +60,7 @@ const RecorderContainer = ({ selectContact, setIsOnMicrophone }) => {
         text: '',
         media: [],
         audio: audioResult.secure_url,
+        files: [],
         createdAt: new Date().toISOString()
       }
   

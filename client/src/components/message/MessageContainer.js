@@ -27,6 +27,7 @@ const MessageContainer = ({messages}) => {
             message={item.text}
             media={item.media}
             audio={item.audio}
+            files={item.files}
             timestamp={new Date(item.createdAt).toLocaleString()}
           />
         ))

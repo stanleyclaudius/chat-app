@@ -13,6 +13,7 @@ const ContactContainer = ({ conversation, selectContact, setSelectContact }) => 
             text={item.text}
             media={item.media}
             audio={item.audio}
+            files={item.files}
             user={item.recipients[0]._id === auth.user?._id ? item.recipients[1] : item.recipients[0]}
             date={item.createdAt}
             selectContact={selectContact}

@@ -1,8 +1,9 @@
 import { HiPhotograph } from 'react-icons/hi'
 import { FaMicrophone } from 'react-icons/fa'
+import { AiFillFile } from 'react-icons/ai'
 import Avatar from './Avatar'
 
-const ContactCard = ({ text, audio, user, date, media, selectContact, setSelectContact }) => {
+const ContactCard = ({ text, audio, user, date, media, files, selectContact, setSelectContact }) => {
   return (
     <div className={`flex items-center p-4 border-b-2 cursor-pointer ${selectContact._id === user._id ? 'bg-gray-100' : undefined} hover:bg-gray-100 transition-[background]`} onClick={() => setSelectContact(user)}>
       <Avatar src={user.avatar} alt={user.name} />
@@ -24,7 +25,14 @@ const ContactCard = ({ text, audio, user, date, media, selectContact, setSelectC
                   Audio
                 </div>
               )
-              : <p className='text-sm'>{text}</p>
+              : files.length > 0
+                ? (
+                  <div className='flex items-center gap-2'>
+                    <AiFillFile />
+                    {files.length}
+                  </div>
+                )
+                : <p className='text-sm'>{text}</p>
           }
 
           {date && <p className='text-sm text-gray-500'>{new Date(date).toLocaleTimeString()}</p>}

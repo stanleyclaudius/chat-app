@@ -25,21 +25,26 @@ const ChatInput = ({ selectContact }) => {
 
   const handleChangeFile = e => {
     const chosenFile = [...e.target.files]
-    console.log(chosenFile)
     setFiles([...files, ...chosenFile])
   }
 
   const handleSubmit = async e => {
     e.preventDefault()
 
-    if (!message && images.length === 0) return
+    if (!message && images.length === 0 && files.length === 0) return
 
     setMessage('')
     setImages([])
+    setFiles([])
 
     let newImages = []
     if (images.length > 0) {
       newImages = await uploadImage(images, 'chat')
+    }
+
+    let newFiles = []
+    if (files.length > 0) {
+      newFiles = await uploadImage(files, 'chat')
     }
 
     const chatData = {
@@ -48,6 +53,7 @@ const ChatInput = ({ selectContact }) => {
       text: message,
       media: newImages,
       audio: '',
+      files: newFiles,
       createdAt: new Date().toISOString()
     }
 
