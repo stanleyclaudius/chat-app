@@ -14,6 +14,7 @@ const conversationReducer = (state = [], action) => {
         ...conversationData,
         text: action.payload.text,
         media: action.payload.media,
+        audio: action.payload.audio,
         createdAt: action.payload.createdAt
       }
 
@@ -26,6 +27,7 @@ const conversationReducer = (state = [], action) => {
         const data = {
           media: action.payload.media ? action.payload.media : [],
           text: action.payload.text ? action.payload.text : '',
+          audio: action.payload.audio ? action.paylaod.audio: '',
           createdAt: action.payload.createdAt ? action.payload.createdAt : '',
           recipients: [
             {

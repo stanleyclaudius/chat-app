@@ -1,7 +1,79 @@
+import { useState, useEffect, useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useRecorder } from 'voice-recorder-react'
 import { FaMicrophone } from 'react-icons/fa'
 import { AiOutlineClose } from 'react-icons/ai'
+import { createMessage } from './../../redux/actions/messageActions'
 
-const RecorderContainer = ({ time, stop, data, start, recording, setIsOnMicrophone }) => {
+const RecorderContainer = ({ selectContact, setIsOnMicrophone }) => {
+  const [audioFile, setAudioFile] = useState('')
+
+  const dispatch = useDispatch()
+  const { auth, socket } = useSelector(state => state)
+
+  const {
+    stop,
+    data,
+    time,
+    start,
+    recording
+  } = useRecorder()
+
+  const blobToBase64 = blob => {
+    const reader = new FileReader()
+    reader.readAsDataURL(blob)
+    return new Promise(resolve => {
+      reader.onloadend = () => {
+        resolve(reader.result)
+      }
+    })
+  }
+
+  const handleToggleMicrophone = () => {
+    if (recording) {
+      stop()
+    } else {
+      start()
+    }
+  }
+
+  const uploadToCloudinary = useCallback(async() => {
+    await blobToBase64(data.blob)
+      .then(res => setAudioFile(res))
+
+    const formData = new FormData()
+    formData.append('file', audioFile)
+    formData.append('upload_preset', 'qdrd1akc')
+    formData.append('cloud_name', 'dpef9sjqt')
+
+    const res = await fetch('https://api.cloudinary.com/v1_1/dpef9sjqt/upload', {
+      method: 'POST',
+      body: formData
+    })
+
+    const audioResult = await res.json()
+    
+    if (audioResult.secure_url) {
+      const chatData = {
+        sender: auth.user,
+        recipient: selectContact,
+        text: '',
+        media: [],
+        audio: audioResult.secure_url,
+        createdAt: new Date().toISOString()
+      }
+  
+      dispatch(createMessage(chatData, auth.token, socket))
+      console.log(audioResult.secure_url)
+    }
+  }, [data, audioFile, dispatch, auth, socket, selectContact])
+
+  useEffect(() => {
+    if (data.url) {
+      uploadToCloudinary()
+    }
+  }, [data.url, uploadToCloudinary])
+  
   return (
     <div className='border-t-2 py-3 px-5 h-60 flex items-center justify-center relative flex-col'>
       <div className='absolute top-5 right-5'>
@@ -10,13 +82,7 @@ const RecorderContainer = ({ time, stop, data, start, recording, setIsOnMicropho
       <div className='rounded-full bg-[rgba(0,0,0,.04)] w-[120px] h-[120px] flex items-center justify-center cursor-pointer'>
         <FaMicrophone
           className={`text-6xl ${recording ? 'text-red-400' : 'text-gray-400'}`}
-          onClick={() => {
-            if (recording) {
-              stop();
-            } else {
-              start();
-            }
-          }}
+          onClick={handleToggleMicrophone}
         />
       </div>
       {

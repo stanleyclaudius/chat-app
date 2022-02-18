@@ -32,7 +32,7 @@ const Dashboard = () => {
       <div className='md:flex md:static relative overflow-x-hidden'>
         <div className='md:flex-1 md:border-r-2'>
           <SearchForm placeholder='Search contact ...' />
-          <ContactContainer conversation={conversation} setSelectContact={setSelectContact} />
+          <ContactContainer conversation={conversation} selectContact={selectContact} setSelectContact={setSelectContact} />
         </div>
         <div className={`md:flex-[3] md:static transition-all duration-200 absolute top-0 bottom-0 h-[100%] bg-white md:h-[90vh] w-full flex flex-col ${selectContact ? 'right-0' : '-right-[5000px]'}`}>
           {

@@ -6,7 +6,6 @@ import { HiPhotograph } from 'react-icons/hi'
 import { FaMicrophone } from 'react-icons/fa'
 import { uploadImage } from './../../utils/imageHelper'
 import { createMessage } from './../../redux/actions/messageActions'
-import Recorder from 'voice-recorder-react'
 import FileDisplayContainer from './../general/FileDisplayContainer'
 import RecorderContainer from './../general/RecorderContainer'
 
@@ -41,6 +40,7 @@ const ChatInput = ({ selectContact }) => {
       recipient: selectContact,
       text: message,
       media: newImages,
+      audio: '',
       createdAt: new Date().toISOString()
     }
 
@@ -52,7 +52,7 @@ const ChatInput = ({ selectContact }) => {
       {images.length > 0 && <FileDisplayContainer images={images} setImages={setImages} />}
       {
         isOnMicrophone ? (
-          <Recorder Render={RecorderContainer} />
+          <RecorderContainer selectContact={selectContact} setIsOnMicrophone={setIsOnMicrophone} />
         )
         : (
           <div className='border-t-2 py-3 px-5'>

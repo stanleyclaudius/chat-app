@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import Avatar from './../general/Avatar'
 
-const Message = ({ type, message, recipientAvatar, media, timestamp }) => {
+const Message = ({ type, message, recipientAvatar, audio, media, timestamp }) => {
   const { auth } = useSelector(state => state)
 
   return (
@@ -26,6 +26,18 @@ const Message = ({ type, message, recipientAvatar, media, timestamp }) => {
                 <img key={idx} src={item} alt={idx} className='w-40 h-40 mb-3' />
               ))
             }
+          </div>
+        </div>
+      }
+
+      {
+        audio &&
+        <div className={`flex ${type === 'sender' ? 'flex-row-reverse' : undefined}`}>
+          <Avatar src={type === 'sender' ? auth.user?.avatar : recipientAvatar} size='30px' />
+          <div className={`${type === 'sender' ? `${message ? '-translate-x-[50px]' : '-translate-x-3'}` : `${message ? 'translate-x-[50px]' : 'translate-x-3'}`}`}>
+            <audio controls>
+              <source src={audio} />
+            </audio>
           </div>
         </div>
       }

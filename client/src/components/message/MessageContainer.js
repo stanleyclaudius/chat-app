@@ -26,6 +26,7 @@ const MessageContainer = ({messages}) => {
             recipientAvatar={item.sender?.avatar}
             message={item.text}
             media={item.media}
+            audio={item.audio}
             timestamp={new Date(item.createdAt).toLocaleString()}
           />
         ))
