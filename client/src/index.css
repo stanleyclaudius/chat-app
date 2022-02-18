@@ -4,6 +4,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  overflow-y: hidden;
+}
+
 .abcRioButtonBlue {
   border-radius: 50% !important;
   background: rgb(243 244 246) !important;

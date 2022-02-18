@@ -13,6 +13,7 @@ const ChatInput = ({ selectContact }) => {
   const [isOnMicrophone, setIsOnMicrophone] = useState(false)
   const [message, setMessage] = useState('')
   const [images, setImages] = useState([])
+  const [files, setFiles] = useState([])
 
   const dispatch = useDispatch()
   const { auth, socket } = useSelector(state => state)
@@ -20,6 +21,12 @@ const ChatInput = ({ selectContact }) => {
   const handleChangeImage = e => {
     const files = [...e.target.files]
     setImages([...images, ...files])
+  }
+
+  const handleChangeFile = e => {
+    const chosenFile = [...e.target.files]
+    console.log(chosenFile)
+    setFiles([...files, ...chosenFile])
   }
 
   const handleSubmit = async e => {
@@ -49,7 +56,7 @@ const ChatInput = ({ selectContact }) => {
   
   return (
     <>
-      {images.length > 0 && <FileDisplayContainer images={images} setImages={setImages} />}
+      {(images.length > 0 || files.length > 0) && <FileDisplayContainer files={files} setFiles={setFiles} images={images} setImages={setImages} />}
       {
         isOnMicrophone ? (
           <RecorderContainer selectContact={selectContact} setIsOnMicrophone={setIsOnMicrophone} />
@@ -60,11 +67,11 @@ const ChatInput = ({ selectContact }) => {
               <input type='text' placeholder='Message here ...' autoFocus className='outline-0 w-full pr-3' value={message} onChange={e => setMessage(e.target.value)} />
               <div className='flex items-center'>
                 <div className='relative w-[20px] h-[20px] overflow-hidden mr-3'>
-                  <input type='file' className='absolute z-10 opacity-0 h-[20px]' />
+                  <input type='file' className='absolute z-10 opacity-0 h-[20px]' accept='.zip,.xlsx,.xls,.doc,.docx,.ppt,.pptx,.pdf' multiple onChange={handleChangeFile} />
                   <IoMdAttach className='text-xl text-gray-700 absolute top-0 left-0' />
                 </div>
                 <div className='relative w-[20px] h-[20px] overflow-hidden mr-3'>
-                  <input type='file' multiple accept="image/*" onChange={handleChangeImage} className='absolute z-10 opacity-0 h-[20px]' />
+                  <input type='file' multiple accept='image/*' onChange={handleChangeImage} className='absolute z-10 opacity-0 h-[20px]' />
                   <HiPhotograph className='text-xl text-gray-700 absolute top-0 left-0' />
                 </div>
                 <FaMicrophone className='text-xl text-gray-700 mr-3 cursor-pointer' onClick={() => setIsOnMicrophone(true)} />
