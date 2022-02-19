@@ -25,10 +25,10 @@ const Header = ({ selectContact, setSelectContact }) => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { auth } = useSelector(state => state)
+  const { auth, socket } = useSelector(state => state)
 
   const handleLogout = async() => {
-    await dispatch(logout(auth.token))
+    await dispatch(logout(auth.token, socket))
     navigate('/')
   }
 

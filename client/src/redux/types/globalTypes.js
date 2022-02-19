@@ -2,5 +2,7 @@ export const GLOBAL_TYPES = {
   AUTH: 'AUTH',
   ALERT: 'ALERT',
   SOCKET: 'SOCKET',
-  TYPE: 'TYPE'
+  TYPE: 'TYPE',
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE'
 }

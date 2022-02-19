@@ -25,7 +25,7 @@ const App = () => {
   return (
     <Router>
       <Alert />
-      { auth.user && <SocketClient /> }
+      { auth.token && <SocketClient /> }
       <Routes>
         <Route path='/' element={auth.user ? <Dashboard /> : <Login />} />
         <Route path='/:page' element={<PageRender />} />

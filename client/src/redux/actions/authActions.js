@@ -29,7 +29,7 @@ export const register = userData => async(dispatch) => {
   }
 }
 
-export const login = userData => async(dispatch) => {
+export const login = (userData, socket) => async(dispatch) => {
   try {
     dispatch({
       type: GLOBAL_TYPES.ALERT,
@@ -55,6 +55,9 @@ export const login = userData => async(dispatch) => {
         success: res.data.msg
       }
     })
+
+    // socket.emit('joinUser', res.data.user)
+    socket.connect()
   } catch (err) {
     dispatch({
       type: GLOBAL_TYPES.ALERT,
@@ -88,7 +91,7 @@ export const refreshToken = () => async(dispatch) => {
   }
 }
 
-export const logout = (token) => async(dispatch) => {
+export const logout = (token, socket) => async(dispatch) => {
   const tokenValidityResult = await checkTokenValidity(token, dispatch)
   const accessToken = tokenValidityResult ? tokenValidityResult : token
 
@@ -107,6 +110,8 @@ export const logout = (token) => async(dispatch) => {
         success: res.data.msg
       }
     })
+
+    socket.disconnect()
   } catch (err) {
     dispatch({
       type: GLOBAL_TYPES.ALERT,
@@ -169,7 +174,7 @@ export const resetPassword = (token, password) => async(dispatch) => {
   }
 }
 
-export const googleLogin = id_token => async(dispatch) => {
+export const googleLogin = (id_token, socket) => async(dispatch) => {
   try {
     dispatch({
       type: GLOBAL_TYPES.ALERT,
@@ -195,6 +200,9 @@ export const googleLogin = id_token => async(dispatch) => {
         success: res.data.msg
       }
     })
+
+    // socket.emit('joinUser', res.data.user)
+    socket.connect()
   } catch (err) {
     dispatch({
       type: GLOBAL_TYPES.ALERT,
@@ -205,7 +213,7 @@ export const googleLogin = id_token => async(dispatch) => {
   }
 }
 
-export const facebookLogin = (accessToken, userID) => async(dispatch) => {
+export const facebookLogin = (accessToken, userID, socket) => async(dispatch) => {
   try {
     dispatch({
       type: GLOBAL_TYPES.ALERT,
@@ -231,6 +239,9 @@ export const facebookLogin = (accessToken, userID) => async(dispatch) => {
         success: res.data.msg
       }
     })
+
+    // socket.emit('joinUser', res.data.user)
+    socket.connect()
   } catch (err) {
     dispatch({
       type: GLOBAL_TYPES.ALERT,

@@ -76,7 +76,7 @@ const ChatInput = ({ selectContact }) => {
     if (!message) {
       socket.emit('doneTyping', { recipient: selectContact._id })
     }
-  }, [message, selectContact])
+  }, [message, socket, selectContact])
   
   return (
     <>

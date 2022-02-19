@@ -6,7 +6,7 @@ import { CONVERSATION_TYPES } from './redux/types/conversationTypes'
 
 const SocketClient = () => {
   const dispatch = useDispatch()
-  const { auth, socket } = useSelector(state => state)
+  const { auth, socket, status } = useSelector(state => state)
 
   useEffect(() => {
     socket.emit('joinUser', auth.user)
@@ -65,6 +65,36 @@ const SocketClient = () => {
     })
 
     return () => socket.off('doneTypingToClient')
+  }, [dispatch, socket])
+  
+  useEffect(() => {
+    socket.emit('checkUserOnline', {})
+  }, [socket, auth])
+
+  useEffect(() => {
+    socket.on('checkUserOnlineToClient', data => {
+      data.forEach(item => {
+        if (!status.includes(item.id) && item.id !== auth.user?._id) {
+          dispatch({
+            type: GLOBAL_TYPES.ONLINE,
+            payload: item.id
+          })  
+        }
+      })
+    })
+
+    return () => socket.off('checkUserOnlineToClient')
+  }, [dispatch, status, socket, auth.user])
+
+  useEffect(() => {
+    socket.on('checkUserOffline', data => {
+      dispatch({
+        type: GLOBAL_TYPES.OFFLINE,
+        payload: data
+      })
+    })
+
+    return () => socket.off('checkUserOffline')
   }, [dispatch, socket])
 
   return (

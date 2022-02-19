@@ -22,16 +22,16 @@ const Login = () => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { auth, alert } = useSelector(state => state)
+  const { auth, alert, socket } = useSelector(state => state)
 
   const onGoogleSuccess = response => {
     const { id_token } = response.getAuthResponse()
-    dispatch(googleLogin(id_token))
+    dispatch(googleLogin(id_token, socket))
   }
 
   const onFacebookSuccess = response => {
     const { accessToken, userID } = response.authResponse
-    dispatch(facebookLogin(accessToken, userID))
+    dispatch(facebookLogin(accessToken, userID, socket))
   }
 
   const handleChange = e => {
@@ -50,7 +50,7 @@ const Login = () => {
     if (!userData.password)
       return dispatch({ type: GLOBAL_TYPES.ALERT, payload: {errors: 'Please provide password field.'} })
 
-    await dispatch(login(userData))
+    await dispatch(login(userData, socket))
     setUserData({
       email: '', password: ''
     })
