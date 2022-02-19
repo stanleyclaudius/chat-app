@@ -1,7 +1,7 @@
 import { MESSAGE_TYPES } from './../types/messageTypes'
 import { CONVERSATION_TYPES } from './../types/conversationTypes'
 import { GLOBAL_TYPES } from './../types/globalTypes'
-import { getDataAPI, postDataAPI } from './../../utils/fetchData'
+import { getDataAPI, postDataAPI, patchDataAPI } from './../../utils/fetchData'
 import { checkTokenValidity } from './../../utils/checkTokenValidity'
 
 export const getConversation = token => async(dispatch) => {
@@ -72,6 +72,24 @@ export const createMessage = (chatData, token, socket) => async(dispatch) => {
       payload: {
         errors: err.response.data.msg
       }
+    })
+  }
+}
+
+export const updateReadStatus = (id, token) => async(dispatch) => {
+  const tokenValidity = await checkTokenValidity(token, dispatch)
+  const accessToken = tokenValidity ? tokenValidity : token
+
+  try {
+    const res = await patchDataAPI(`message/update/${id}`, {}, accessToken)
+    dispatch({
+      type: MESSAGE_TYPES.UPDATE_READ_STATUS,
+      payload: res.data.data
+    })
+  } catch (err) {
+    dispatch({
+      type: GLOBAL_TYPES.ALERT,
+      payload: err.response.data.msg
     })
   }
 }

@@ -15,6 +15,12 @@ const messageCtrl = {
         recipients: [sender, recipient], text, media, audio, files
       }, {new: true, upsert: true})
 
+      const prevTotalUnread = conversation.totalUnread
+
+      await Conversation.findOneAndUpdate({ _id: conversation._id }, {
+        totalUnread: prevTotalUnread + 1
+      }, { new: true })
+
       const message = new Message({
         conversation: conversation._id,
         sender,
@@ -50,6 +56,31 @@ const messageCtrl = {
       }).populate('sender recipient', 'avatar name')
 
       return res.status(200).json({messages})
+    } catch (err) {
+      return res.status(500).json({msg: err.message})
+    }
+  },
+  udpateReadStatus: async(req, res) => {
+    try {
+      const findMessage = await Message.findOne({
+        $or: [
+          { sender: req.user._id, recipient: req.params.id },
+          { sender: req.params.id, recipient: req.user._id }
+        ]
+      })
+
+      const data = await Message.updateMany({
+        $or: [
+          { sender: req.user._id, recipient: req.params.id },
+          { sender: req.params.id, recipient: req.user._id }
+        ]
+      }, { isRead: true })
+      
+      await Conversation.findOneAndUpdate({_id: findMessage.conversation}, {
+        totalUnread: 0
+      })
+
+      res.status(200).json({ msg: 'Message read.' })
     } catch (err) {
       return res.status(500).json({msg: err.message})
     }

@@ -7,7 +7,8 @@ const messageSchema = new mongoose.Schema({
   text: String,
   media: Array,
   audio: String,
-  files: Array
+  files: Array,
+  isRead: { type: Boolean, default: false }
 }, {
   timestamps: true
 })

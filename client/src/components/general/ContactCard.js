@@ -3,8 +3,7 @@ import { FaMicrophone } from 'react-icons/fa'
 import { AiFillFile } from 'react-icons/ai'
 import Avatar from './Avatar'
 
-const ContactCard = ({ text, audio, user, date, media, files, selectContact, setSelectContact, isOnline }) => {
-
+const ContactCard = ({ text, audio, user, date, media, files, selectContact, setSelectContact, isOnline}) => {
   return (
     <div className={`flex items-center p-4 border-b-2 cursor-pointer ${selectContact._id === user._id ? 'bg-gray-100' : undefined} hover:bg-gray-100 transition-[background]`} onClick={() => setSelectContact(user)}>
       <Avatar src={user.avatar} alt={user.name} />

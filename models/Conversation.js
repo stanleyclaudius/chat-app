@@ -5,7 +5,8 @@ const conversationSchema = new mongoose.Schema({
   text: String,
   media: Array,
   audio: String,
-  files: Array
+  files: Array,
+  totalUnread: { type: Number, default: 0 }
 }, {
   timestamps: true
 })
