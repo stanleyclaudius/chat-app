@@ -76,7 +76,7 @@ export const createMessage = (chatData, token, socket) => async(dispatch) => {
   }
 }
 
-export const updateReadStatus = (id, token) => async(dispatch) => {
+export const updateReadStatus = (id, senderId, token, socket) => async(dispatch) => {
   const tokenValidity = await checkTokenValidity(token, dispatch)
   const accessToken = tokenValidity ? tokenValidity : token
 
@@ -84,7 +84,13 @@ export const updateReadStatus = (id, token) => async(dispatch) => {
     const res = await patchDataAPI(`message/update/${id}`, {}, accessToken)
     dispatch({
       type: MESSAGE_TYPES.UPDATE_READ_STATUS,
-      payload: res.data.data
+      payload: res.data.conversation
+    })
+
+    socket.emit('readMessage', {
+      recipient: id,
+      sender: senderId,
+      conversation: res.data.conversation
     })
   } catch (err) {
     dispatch({

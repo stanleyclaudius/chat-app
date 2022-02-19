@@ -1,4 +1,5 @@
 import { CONVERSATION_TYPES } from './../types/conversationTypes'
+import { MESSAGE_TYPES } from './../types/messageTypes'
 
 const conversationReducer = (state = [], action) => {
   switch (action.type) {
@@ -9,13 +10,18 @@ const conversationReducer = (state = [], action) => {
         (item.recipients[0]._id === action.payload.sender._id && item.recipients[1]._id === action.payload.recipient._id) ||
         (item.recipients[0]._id === action.payload.recipient._id && item.recipients[1]._id === action.payload.sender._id)
       ))
-
+      
       const newConversationData = {
         ...conversationData,
+        recipients: [
+          action.payload.sender,
+          action.payload.recipient
+        ],
         text: action.payload.text,
         media: action.payload.media,
         audio: action.payload.audio,
         files: action.payload.files,
+        totalUnread: conversationData.totalUnread + 1,
         createdAt: action.payload.createdAt
       }
 
@@ -48,6 +54,8 @@ const conversationReducer = (state = [], action) => {
         return [data, ...state]
       }
       return state
+    case MESSAGE_TYPES.UPDATE_READ_STATUS:
+      return state.map(item => item._id === action.payload ? {...item, totalUnread: 0} : item)
     default:
       return state
   }

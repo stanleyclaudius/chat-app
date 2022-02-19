@@ -97,6 +97,22 @@ const SocketClient = () => {
     return () => socket.off('checkUserOffline')
   }, [dispatch, socket])
 
+  useEffect(() => {
+    socket.on('readMessageToClient', data => {
+      dispatch({
+        type: MESSAGE_TYPES.UPDATE_MESSAGE_READ,
+        payload: data
+      })
+
+      dispatch({
+        type: MESSAGE_TYPES.UPDATE_READ_STATUS,
+        payload: data.conversation
+      })
+    })
+
+    return () => socket.off('readMessageToClient')
+  }, [socket, dispatch])
+
   return (
     <div></div>
   )

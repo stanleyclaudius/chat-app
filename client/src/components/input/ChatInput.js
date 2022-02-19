@@ -54,6 +54,7 @@ const ChatInput = ({ selectContact }) => {
       media: newImages,
       audio: '',
       files: newFiles,
+      isRead: false,
       createdAt: new Date().toISOString()
     }
 

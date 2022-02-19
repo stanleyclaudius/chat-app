@@ -1,8 +1,9 @@
 import { AiFillFileExcel, AiFillFilePdf, AiFillFilePpt, AiFillFileUnknown, AiFillFileWord, AiFillFileZip, AiOutlineDownload } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
+import { BsCheck2All } from 'react-icons/bs'
 import Avatar from './../general/Avatar'
 
-const Message = ({ type, message, recipientAvatar, audio, media, files, timestamp }) => {
+const Message = ({ type, message, sender, recipientAvatar, audio, media, files, timestamp, isRead }) => {
   const { auth } = useSelector(state => state)
 
   return (
@@ -11,8 +12,16 @@ const Message = ({ type, message, recipientAvatar, audio, media, files, timestam
         message &&
         <div className={`flex ${type === 'sender' ? 'flex-row-reverse' : undefined}`}>
           <Avatar src={type === 'sender' ? auth.user?.avatar : recipientAvatar} size='30px' />
-            <div className={`max-w-[20rem] w-fit float-right break-all ${type === 'sender' ? 'bg-[#41AEF3]' : 'bg-gray-100'} p-3 rounded-md mb-2 ${type === 'sender' ? 'text-white' : undefined} ${type === 'sender' ? 'mr-3' : 'ml-3'}`}>
+            <div className={`max-w-[20rem] w-fit float-right break-all ${type === 'sender' ? 'bg-[#41AEF3]' : 'bg-gray-100'} p-3 rounded-md mb-2 ${type === 'sender' ? 'text-white' : undefined} ${type === 'sender' ? 'mr-3' : 'ml-3'} flex items-center gap-2`}>
               {message}
+              {
+                sender._id === auth.user?._id &&
+                (
+                  isRead
+                  ? <BsCheck2All className='text-blue-500 text-lg' />
+                  : <BsCheck2All className='text-gray-300 text-lg' />
+                )
+              }
             </div>
         </div>
       }

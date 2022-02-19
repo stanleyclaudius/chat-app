@@ -42,6 +42,12 @@ const socketServer = socket => {
 
     socket.emit('checkUserOnlineToClient', users)
   })
+
+  socket.on('readMessage', data => {
+    const client = users.find(user => user.id === data.recipient)
+    if (client)
+      socket.to(`${client.socketId}`).emit('readMessageToClient', data)
+  })
 }
 
 module.exports = socketServer

@@ -69,7 +69,7 @@ const messageCtrl = {
         ]
       })
 
-      const data = await Message.updateMany({
+      await Message.updateMany({
         $or: [
           { sender: req.user._id, recipient: req.params.id },
           { sender: req.params.id, recipient: req.user._id }
@@ -80,7 +80,7 @@ const messageCtrl = {
         totalUnread: 0
       })
 
-      res.status(200).json({ msg: 'Message read.' })
+      res.status(200).json({ conversation: findMessage.conversation })
     } catch (err) {
       return res.status(500).json({msg: err.message})
     }

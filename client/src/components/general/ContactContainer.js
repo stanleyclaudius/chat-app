@@ -15,9 +15,11 @@ const ContactContainer = ({ conversation, selectContact, setSelectContact }) => 
             audio={item.audio}
             files={item.files}
             user={item.recipients[0]._id === auth.user?._id ? item.recipients[1] : item.recipients[0]}
+            recipients={item.recipients}
             isOnline={status.find(user => (user === item.recipients[0]._id) || (user === item.recipients[1]._id))}
             date={item.createdAt}
             selectContact={selectContact}
+            totalUnread={item.totalUnread}
             setSelectContact={setSelectContact}
           />
         ))
