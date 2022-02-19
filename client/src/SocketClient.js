@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { GLOBAL_TYPES } from './redux/types/globalTypes'
 import { MESSAGE_TYPES } from './redux/types/messageTypes'
 import { CONVERSATION_TYPES } from './redux/types/conversationTypes'
 
@@ -42,6 +43,28 @@ const SocketClient = () => {
     })
 
     return () => socket.off('createMessageToClient')
+  }, [dispatch, socket])
+
+  useEffect(() => {
+    socket.on('typingToClient', data => {
+      dispatch({
+        type: GLOBAL_TYPES.TYPE,
+        payload: data
+      })
+    })
+
+    return () => socket.off('typingToClient')
+  }, [dispatch, socket])
+
+  useEffect(() => {
+    socket.on('doneTypingToClient', data => {
+      dispatch({
+        type: GLOBAL_TYPES.TYPE,
+        payload: {}
+      })
+    })
+
+    return () => socket.off('doneTypingToClient')
   }, [dispatch, socket])
 
   return (

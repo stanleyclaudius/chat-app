@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import Message from './Message'
 
 const MessageContainer = ({messages}) => {
-  const { auth } = useSelector(state => state)
+  const { auth, typing } = useSelector(state => state)
 
   const messageContainerRef = useRef()
 
@@ -32,6 +32,7 @@ const MessageContainer = ({messages}) => {
           />
         ))
       }
+      <p className='animate-bounce'>{typing.message && typing.message}</p>
     </div>
   )
 }
