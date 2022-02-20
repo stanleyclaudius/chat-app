@@ -33,7 +33,17 @@ const Message = ({ type, message, sender, recipientAvatar, audio, media, files, 
           <div className={`${type === 'sender' ? `${message ? '-translate-x-[50px]' : '-translate-x-3'}` : `${message ? 'translate-x-[50px]' : 'translate-x-3'}`}`}>
             {
               media.map((item, idx) => (
-                <img key={idx} src={item} alt={idx} className='w-40 h-40 mb-3' />
+                <div className='relative'>
+                  <img key={idx} src={item} alt={idx} className='w-40 h-40 mb-3' />
+                  {
+                    sender._id === auth.user?._id &&
+                    (
+                      isRead
+                      ? <BsCheck2All className='text-blue-500 text-xl absolute bottom-1 right-2' />
+                      : <BsCheck2All className='text-gray-300 text-xl absolute bottom-1 right-2' />
+                    )
+                  }
+                </div>
               ))
             }
           </div>
@@ -42,8 +52,18 @@ const Message = ({ type, message, sender, recipientAvatar, audio, media, files, 
 
       {
         audio &&
-        <div className={`flex ${type === 'sender' ? 'flex-row-reverse' : undefined}`}>
+        <div className={`flex ${type === 'sender' ? 'flex-row-reverse' : undefined} items-center`}>
           <Avatar src={type === 'sender' ? auth.user?.avatar : recipientAvatar} size='30px' />
+          <div className={`${type === 'sender' ? '-translate-x-2' : 'translate-x-2'}`}>
+            {
+              sender._id === auth.user?._id &&
+              (
+                isRead
+                ? <BsCheck2All className='text-blue-500 text-xl' />
+                : <BsCheck2All className='text-gray-300 text-xl' />
+              )
+            }
+          </div>
           <div className={`${type === 'sender' ? `${message ? '-translate-x-[50px]' : '-translate-x-3'}` : `${message ? 'translate-x-[50px]' : 'translate-x-3'}`}`}>
             <audio controls>
               <source src={audio} />
@@ -71,6 +91,14 @@ const Message = ({ type, message, sender, recipientAvatar, audio, media, files, 
                         <a href={item} alt={idx} target='_blank' rel='noreferrer'>
                           <AiOutlineDownload className='text-lg' />
                         </a>
+                        {
+                          sender._id === auth.user?._id &&
+                          (
+                            isRead
+                            ? <BsCheck2All className='text-blue-500 text-xl' />
+                            : <BsCheck2All className='text-gray-300 text-xl' />
+                          )
+                        }
                       </div>
                     )
                     : item.split('.')[item.split('.').length - 1].includes('docx', 'doc')
@@ -83,6 +111,14 @@ const Message = ({ type, message, sender, recipientAvatar, audio, media, files, 
                           <a href={item} alt={idx}>
                             <AiOutlineDownload className='text-lg' />
                           </a>
+                          {
+                            sender._id === auth.user?._id &&
+                            (
+                              isRead
+                              ? <BsCheck2All className='text-blue-500 text-xl' />
+                              : <BsCheck2All className='text-gray-300 text-xl' />
+                            )
+                          }
                         </div>
                       )
                       : item.split('.')[item.split('.').length - 1].includes('xlsx', 'xls')
@@ -95,6 +131,14 @@ const Message = ({ type, message, sender, recipientAvatar, audio, media, files, 
                             <a href={item} alt={idx}>
                               <AiOutlineDownload className='text-lg' />
                             </a>
+                            {
+                              sender._id === auth.user?._id &&
+                              (
+                                isRead
+                                ? <BsCheck2All className='text-blue-500 text-xl' />
+                                : <BsCheck2All className='text-gray-300 text-xl' />
+                              )
+                            }
                           </div>
                         )
                         : item.split('.')[item.split('.').length - 1].includes('pptx', 'ppt')
@@ -107,6 +151,14 @@ const Message = ({ type, message, sender, recipientAvatar, audio, media, files, 
                               <a href={item} alt={idx}>
                                 <AiOutlineDownload className='text-lg' />
                               </a>
+                              {
+                                sender._id === auth.user?._id &&
+                                (
+                                  isRead
+                                  ? <BsCheck2All className='text-blue-500 text-xl' />
+                                  : <BsCheck2All className='text-gray-300 text-xl' />
+                                )
+                              }
                             </div>
                           )
                           : item.split('.')[item.split('.').length - 1] === 'zip'
@@ -119,6 +171,14 @@ const Message = ({ type, message, sender, recipientAvatar, audio, media, files, 
                                 <a href={item} alt={idx}>
                                   <AiOutlineDownload className='text-lg' />
                                 </a>
+                                {
+                                  sender._id === auth.user?._id &&
+                                  (
+                                    isRead
+                                    ? <BsCheck2All className='text-blue-500 text-xl' />
+                                    : <BsCheck2All className='text-gray-300 text-xl' />
+                                  )
+                                }
                               </div>
                             )
                             : (
@@ -130,6 +190,14 @@ const Message = ({ type, message, sender, recipientAvatar, audio, media, files, 
                                 <a href={item} alt={idx}>
                                   <AiOutlineDownload className='text-lg' />
                                 </a>
+                                {
+                                  sender._id === auth.user?._id &&
+                                  (
+                                    isRead
+                                    ? <BsCheck2All className='text-blue-500 text-xl' />
+                                    : <BsCheck2All className='text-gray-300 text-xl' />
+                                  )
+                                }
                               </div>
                             )
                   }
