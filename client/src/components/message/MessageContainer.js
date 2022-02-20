@@ -16,15 +16,6 @@ const MessageContainer = ({ messages }) => {
     }
   })
 
-  // useEffect(() => {
-  //   if (selectContact && selectContact._id !== auth.user?._id) {
-  //     socket.emit('readMessage', {
-  //       recipient: auth.user?._id,
-  //       conversation: messages[0]?.conversation
-  //     })
-  //   }
-  // }, [auth.user?._id, messages, selectContact, socket])
-
   return (
     <div className='flex-1 px-5 py-7 overflow-auto message-container' ref={messageContainerRef}>
       {

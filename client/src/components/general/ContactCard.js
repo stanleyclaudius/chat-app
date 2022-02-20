@@ -4,6 +4,7 @@ import { FaMicrophone } from 'react-icons/fa'
 import { AiFillFile } from 'react-icons/ai'
 import { updateReadStatus } from './../../redux/actions/messageActions'
 import Avatar from './Avatar'
+import { useEffect } from 'react'
 
 const ContactCard = ({ text, audio, user, date, media, files, selectContact, setSelectContact, totalUnread, isOnline, recipients }) => {
   const dispatch = useDispatch()
@@ -15,6 +16,12 @@ const ContactCard = ({ text, audio, user, date, media, files, selectContact, set
     }
     setSelectContact(user)
   }
+
+  useEffect(() => {
+    if (selectContact && recipients[1]._id === auth.user?._id && totalUnread > 0) {
+      dispatch(updateReadStatus(recipients[0]._id, auth.user?._id, auth.token, socket))
+    }
+  }, [dispatch, recipients, socket, auth, totalUnread, selectContact])
 
   return (
     <div className={`flex items-center p-4 border-b-2 cursor-pointer ${selectContact._id === user._id ? 'bg-gray-100' : undefined} hover:bg-gray-100 transition-[background]`} onClick={handleSelectContact}>
