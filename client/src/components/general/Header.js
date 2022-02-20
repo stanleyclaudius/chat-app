@@ -13,7 +13,8 @@ import ContactModal from './../modal/ContactModal'
 import SearchPeopleModal from './../modal/SearchPeopleModal'
 import EditProfileModal from './../modal/EditProfileModal'
 import ChangePasswordModal from './../modal/ChangePasswordModal'
-import CallModal from './../modal/AudioCallModal'
+import AudioCallModal from './../modal/AudioCallModal'
+import VideoCallModal from './../modal/VideoCallModal'
 import Avatar from './Avatar'
 
 const Header = ({ selectContact, setSelectContact }) => {
@@ -23,6 +24,7 @@ const Header = ({ selectContact, setSelectContact }) => {
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false)
   const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false)
   const [openAudioCallModal, setOpenAudioCallModal] = useState(false)
+  const [openVideoCallModal, setOpenVideoCallModal] = useState(false)
   const [notFriend, setNotFriend] = useState(false)
 
   const navigate = useNavigate()
@@ -59,7 +61,7 @@ const Header = ({ selectContact, setSelectContact }) => {
             <div className='flex items-center mt-1'>
               <p>Message</p>
               <RiPhoneFill className='ml-4 text-lg cursor-pointer' onClick={() => setOpenAudioCallModal(true)} />
-              <IoVideocam className='ml-4 text-lg cursor-pointer' />
+              <IoVideocam className='ml-4 text-lg cursor-pointer' onClick={() => setOpenVideoCallModal(true)} />
             </div>
           </div>
         }
@@ -102,7 +104,8 @@ const Header = ({ selectContact, setSelectContact }) => {
       <SearchPeopleModal openSearchPeopleModal={openSearchPeopleModal} setOpenSearchPeopleModal={setOpenSearchPeopleModal} />
       <EditProfileModal openEditProfileModal={openEditProfileModal} setOpenEditProfileModal={setOpenEditProfileModal} />
       <ChangePasswordModal openChangePasswordModal={openChangePasswordModal} setOpenChangePasswordModal={setOpenChangePasswordModal} />
-      <CallModal openAudioCallModal={openAudioCallModal} setOpenAudioCallModal={setOpenAudioCallModal} />
+      <AudioCallModal openAudioCallModal={openAudioCallModal} setOpenAudioCallModal={setOpenAudioCallModal} />
+      <VideoCallModal openVideoCallModal={openVideoCallModal} setOpenVideoCallModal={setOpenVideoCallModal} />
     </>
   )
 }
