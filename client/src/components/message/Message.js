@@ -12,7 +12,7 @@ const Message = ({ type, message, sender, recipientAvatar, audio, media, files, 
         message &&
         <div className={`flex ${type === 'sender' ? 'flex-row-reverse' : undefined}`}>
           <Avatar src={type === 'sender' ? auth.user?.avatar : recipientAvatar} size='30px' />
-            <div className={`max-w-[20rem] w-fit float-right break-all ${type === 'sender' ? 'bg-[#41AEF3]' : 'bg-gray-100'} p-3 rounded-md mb-2 ${type === 'sender' ? 'text-white' : undefined} ${type === 'sender' ? 'mr-3' : 'ml-3'} flex items-center gap-2`}>
+            <div className={`max-w-[20rem] w-fit float-right break-all ${type === 'sender' ? 'bg-sky-400' : 'bg-gray-100'} p-3 rounded-md mb-2 ${type === 'sender' ? 'text-white' : undefined} ${type === 'sender' ? 'mr-3' : 'ml-3'} flex items-center gap-2`}>
               {message}
               {
                 sender._id === auth.user?._id &&
