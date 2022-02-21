@@ -12,7 +12,7 @@ const CallModal = () => {
   const [answer, setAnswer] = useState(false)
 
   const dispatch = useDispatch()
-  const { call } = useSelector(state => state)
+  const { auth, call, socket } = useSelector(state => state)
 
   const handleAnswer = () => {
     setAnswer(true)
@@ -20,6 +20,7 @@ const CallModal = () => {
 
   const handleEndCall = () => {
     dispatch({ type: GLOBAL_TYPES.CALL, payload: null })
+    socket.emit('endCall', call)
   }
 
   useEffect(() => {
@@ -49,25 +50,52 @@ const CallModal = () => {
     }
   }, [dispatch, answer])
 
+  useEffect(() => {
+    socket.on('endCallToClient', data => {
+      dispatch({ type: GLOBAL_TYPES.CALL, payload: null })
+    })
+
+    return () => socket.off('endCallToClient')
+  }, [dispatch, socket])
+
   return (
     <div className='bg-[rgba(0,0,0,.7)] fixed top-0 right-0 bottom-0 left-0 z-[999] p-5 flex items-center justify-center'>
       <div className='bg-white w-full max-w-[350px] p-8 flex items-center justify-center flex-col rounded-lg shadow-2xl'>
         <Avatar src={call.avatar} alt={call.name} />
         <h1 className='font-medium text-xl mt-5'>{call.name}</h1>
-        <p className='mt-8'>{call.video ? 'Video Call' : 'Audio Call'}</p>
-        <div className='mt-4 flex items-center gap-2'>
-          <p>{min.toString().length > 1 ? min : '0' + min}</p>
-          <p>:</p>
-          <p>{second.toString().length > 1 ? second : '0' + second}</p>
-        </div>
+        {
+          !answer &&
+          <>
+            <div className='mt-4 flex items-center gap-2'>
+              <p>{min.toString().length > 1 ? min : '0' + min}</p>
+              <p>:</p>
+              <p>{second.toString().length > 1 ? second : '0' + second}</p>
+            </div>
+          </>
+        }
+        
+        {
+          answer
+          ? (
+            <div className='mt-4 flex items-center gap-2'>
+              <p>{min.toString().length > 1 ? min : '0' + min}</p>
+              <p>:</p>
+              <p>{second.toString().length > 1 ? second : '0' + second}</p>
+            </div>
+          )
+          : <p className='mt-8'>{call.video ? 'Video Call' : 'Audio Call'}</p>
+        }
         <div className='flex items-center mt-8 gap-8'>
-          <div className='bg-green-500 rounded-full cursor-pointer hover:bg-green-400'>
-            {
-              call.video
-              ? <IoIosVideocam className='text-white text-5xl p-3' onClick={handleAnswer} />
-              : <IoIosCall className='text-white text-5xl p-3' onClick={handleAnswer} />
-            }
-          </div>
+          {
+            (call.recipient === auth.user?._id && !answer) &&
+            <div className='bg-green-500 rounded-full cursor-pointer hover:bg-green-400'>
+              {
+                call.video
+                ? <IoIosVideocam className='text-white text-5xl p-3' onClick={handleAnswer} />
+                : <IoIosCall className='text-white text-5xl p-3' onClick={handleAnswer} />
+              }
+            </div>
+          }
           <div className='bg-red-500 rounded-full cursor-pointer hover:bg-red-400'>
             <HiPhoneMissedCall onClick={handleEndCall}className='text-white text-5xl p-3' />
           </div>

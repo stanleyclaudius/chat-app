@@ -26,7 +26,7 @@ const Header = ({ selectContact, setSelectContact }) => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { auth, socket } = useSelector(state => state)
+  const { auth, socket, peer } = useSelector(state => state)
 
   const handleLogout = async() => {
     await dispatch(logout(auth.token, socket))
@@ -45,12 +45,30 @@ const Header = ({ selectContact, setSelectContact }) => {
     dispatch({ type: GLOBAL_TYPES.CALL, payload: msg })
   }
 
+  const callUser = ({ video }) => {
+    const { _id, avatar, name } = auth.user
+
+    const msg = {
+      sender: _id,
+      recipient: selectContact._id,
+      avatar,
+      name,
+      video
+    }
+
+    if (peer.open) msg.peerId = peer._id
+
+    socket.emit('callUser', msg)
+  }
+
   const handleAudioCall = () => {
     caller({ video: false })
+    callUser({ video: false })
   }
 
   const handleVideoCall = () => {
     caller({ video: true })
+    callUser({ video: true })
   }
 
   useEffect(() => {

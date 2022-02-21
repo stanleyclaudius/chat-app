@@ -5,5 +5,6 @@ export const GLOBAL_TYPES = {
   TYPE: 'TYPE',
   ONLINE: 'ONLINE',
   OFFLINE: 'OFFLINE',
-  CALL: 'CALL'
+  CALL: 'CALL',
+  PEER: 'PEER'
 }

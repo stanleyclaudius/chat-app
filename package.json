@@ -11,6 +11,7 @@
     "mongoose": "^6.1.9",
     "morgan": "^1.10.0",
     "nodemailer": "^4.6.8",
+    "peer": "^0.6.1",
     "socket.io": "^4.4.1"
   },
   "devDependencies": {

@@ -6,7 +6,7 @@ import { CONVERSATION_TYPES } from './redux/types/conversationTypes'
 
 const SocketClient = () => {
   const dispatch = useDispatch()
-  const { auth, socket, status } = useSelector(state => state)
+  const { auth, socket, status, call } = useSelector(state => state)
 
   useEffect(() => {
     socket.emit('joinUser', auth.user)
@@ -112,6 +112,27 @@ const SocketClient = () => {
 
     return () => socket.off('readMessageToClient')
   }, [socket, dispatch])
+
+  useEffect(() => {
+    socket.on('callUserToClient', data => {
+      dispatch({ type: GLOBAL_TYPES.CALL, payload: data })
+    })
+
+    return () => socket.off('callUserToClient')
+  }, [dispatch, socket])
+
+  useEffect(() => {
+    socket.on('userBusy', data => {
+      dispatch({
+        type: GLOBAL_TYPES.ALERT,
+        payload: {
+          errors: `${call.name} is busy.`
+        }
+      })
+    })
+
+    return () => socket.off('userBusy')
+  }, [dispatch, socket, call])
 
   return (
     <div></div>

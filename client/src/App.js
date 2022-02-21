@@ -10,6 +10,7 @@ import PageRender from './utils/PageRender'
 import Alert from './components/general/Alert'
 import SocketClient from './SocketClient'
 import CallModal from './components/modal/CallModal'
+import Peer from 'peerjs'
 
 const App = () => {
   const { auth, call } = useSelector(state => state)
@@ -21,6 +22,14 @@ const App = () => {
     const socket = io()
     dispatch({ type: GLOBAL_TYPES.SOCKET, payload: socket })
     return () => socket.close()
+  }, [dispatch])
+
+  useEffect(() => {
+    const peer = new Peer(undefined, {
+      host: '/', port: '3001'
+    })
+
+    dispatch({ type: GLOBAL_TYPES.PEER, payload: peer })
   }, [dispatch])
 
   return (

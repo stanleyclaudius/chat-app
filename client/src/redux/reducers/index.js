@@ -7,6 +7,7 @@ import socket from './socketReducer'
 import typing from './typeReducer'
 import status from './statusReducer'
 import call from './callReducer'
+import peer from './peerReducer'
 
 export default combineReducers({
   auth,
@@ -16,5 +17,6 @@ export default combineReducers({
   socket,
   typing,
   status,
-  call
+  call,
+  peer
 })

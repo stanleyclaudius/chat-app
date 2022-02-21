@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const dotenv = require('dotenv')
 const connectDB = require('./config/db')
 const SocketServer = require('./SocketServer')
+const { PeerServer } = require('peer')
 
 dotenv.config({
   path: './config/.env'
@@ -18,6 +19,8 @@ const io = require('socket.io')(http)
 io.on('connection', socket => {
   SocketServer(socket)
 })
+
+PeerServer({ port: 3001, path: '/' })
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
