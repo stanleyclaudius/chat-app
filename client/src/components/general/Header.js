@@ -40,7 +40,9 @@ const Header = ({ selectContact, setSelectContact }) => {
       recipient: _id,
       avatar,
       name,
-      video
+      video,
+      recipientName: auth.user?.name,
+      recipientAvatar: auth.user?.avatar
     }
     dispatch({ type: GLOBAL_TYPES.CALL, payload: msg })
   }
@@ -53,7 +55,9 @@ const Header = ({ selectContact, setSelectContact }) => {
       recipient: selectContact._id,
       avatar,
       name,
-      video
+      video,
+      recipientName: selectContact.name,
+      recipientAvatar: selectContact.avatar
     }
 
     if (peer.open) msg.peerId = peer._id

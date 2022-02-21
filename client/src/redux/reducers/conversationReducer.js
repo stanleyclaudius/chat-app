@@ -21,6 +21,7 @@ const conversationReducer = (state = [], action) => {
         media: action.payload.media,
         audio: action.payload.audio,
         files: action.payload.files,
+        call: action.payload.call,
         totalUnread: conversationData.totalUnread + 1,
         createdAt: action.payload.createdAt
       }
@@ -36,6 +37,7 @@ const conversationReducer = (state = [], action) => {
           text: action.payload.text ? action.payload.text : '',
           audio: action.payload.audio ? action.paylaod.audio: '',
           files: action.payload.files ? action.payload.files : [],
+          call: action.payload.call ? action.payload.call : {},
           createdAt: action.payload.createdAt ? action.payload.createdAt : '',
           recipients: [
             {

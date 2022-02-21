@@ -23,7 +23,10 @@ const SocketClient = () => {
         recipientAvatar: data.recipient.avatar,
         media: data.media,
         createdAt: data.createdAt,
-        text: data.text
+        text: data.text,
+        audio: data.audio,
+        files: data.files,
+        call: data.call
       }
 
       dispatch({

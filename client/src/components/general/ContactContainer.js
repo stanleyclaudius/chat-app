@@ -20,6 +20,7 @@ const ContactContainer = ({ conversation, selectContact, setSelectContact }) => 
             date={item.createdAt}
             selectContact={selectContact}
             totalUnread={item.totalUnread}
+            call={item.call}
             setSelectContact={setSelectContact}
           />
         ))

@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { HiPhoneMissedCall } from 'react-icons/hi'
 import { IoIosCall, IoIosVideocam } from 'react-icons/io'
 import { GLOBAL_TYPES } from './../../redux/types/globalTypes'
+import { createMessage } from './../../redux/actions/messageActions'
 import Avatar from './../general/Avatar'
 import VideoCallModal from './VideoCallModal'
 
@@ -46,12 +47,40 @@ const CallModal = () => {
       })
   }
 
+  const addCallMessages = useCallback((call, times, disconnect) => {
+    if (call.recipient !== auth.user._id || disconnect) {
+      const chatData = {
+        sender: {
+          _id: call.sender,
+          name: call.recipientName,
+          avatar: call.recipientAvatar
+        },
+        recipient: {
+          _id: call.recipient,
+          name: call.name,
+          avatar: call.avatar
+        },
+        text: '',
+        media: [],
+        audio: '',
+        files: [],
+        isRead: false,
+        call: { video: call.video, times },
+        createdAt: new Date().toISOString()
+      }
+
+      dispatch(createMessage(chatData, auth.token, socket))
+    }
+  }, [auth, socket, dispatch])
+
   const handleEndCall = () => {
     if (tracks) {
       tracks.forEach(track => track.stop())
     }
+    let times = answer ? total : 0
+    socket.emit('endCall', {...call, times})
+    addCallMessages(call, times)
     dispatch({ type: GLOBAL_TYPES.CALL, payload: null })
-    socket.emit('endCall', call)
   }
 
   useEffect(() => {
@@ -78,23 +107,26 @@ const CallModal = () => {
         if (tracks) {
           tracks.forEach(track => track.stop())
         }
+        socket.emit('endCall', {...call, times: 0})
+        addCallMessages(call, 0)
         dispatch({ type: GLOBAL_TYPES.CALL, payload: null })
       }, 15000)
 
       return () => clearTimeout(timer)
     }
-  }, [dispatch, answer, tracks])
+  }, [dispatch, answer, tracks, addCallMessages, socket, call])
 
   useEffect(() => {
     socket.on('endCallToClient', data => {
       if (tracks) {
         tracks.forEach(track => track.stop())
       }
+      addCallMessages(data, data.times)
       dispatch({ type: GLOBAL_TYPES.CALL, payload: null })
     })
 
     return () => socket.off('endCallToClient')
-  }, [dispatch, socket, tracks])
+  }, [dispatch, socket, tracks, addCallMessages])
 
   useEffect(() => {
     peer.on('call', newCall => {
@@ -125,12 +157,14 @@ const CallModal = () => {
       if (tracks) {
         tracks.forEach(track => track.stop())
       }
+      let times = answer ? total : 0
+      addCallMessages(call, times, true)
       dispatch({ type: GLOBAL_TYPES.CALL, payload: null })
-      dispatch({ type: GLOBAL_TYPES.ALERT, payload: { errors: 'User disconected.' } })
+      dispatch({ type: GLOBAL_TYPES.ALERT, payload: { errors: `${call.name} disconected.` } })
     })
 
     return () => socket.off('callerDisconnect')
-  }, [dispatch, socket, tracks])
+  }, [dispatch, socket, tracks, addCallMessages, answer, call, total])
 
   return (
     <>

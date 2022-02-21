@@ -1,12 +1,14 @@
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { HiPhotograph } from 'react-icons/hi'
+import { HiPhoneMissedCall, HiPhotograph } from 'react-icons/hi'
 import { FaMicrophone } from 'react-icons/fa'
+import { IoIosVideocam, IoIosCall } from 'react-icons/io'
 import { AiFillFile } from 'react-icons/ai'
 import { updateReadStatus } from './../../redux/actions/messageActions'
 import Avatar from './Avatar'
-import { useEffect } from 'react'
+import { IoVideocamOff } from 'react-icons/io5'
 
-const ContactCard = ({ text, audio, user, date, media, files, selectContact, setSelectContact, totalUnread, isOnline, recipients }) => {
+const ContactCard = ({ text, audio, user, date, media, files, selectContact, setSelectContact, totalUnread, isOnline, recipients, call }) => {
   const dispatch = useDispatch()
   const { auth, socket } = useSelector(state => state)
 
@@ -62,7 +64,45 @@ const ContactCard = ({ text, audio, user, date, media, files, selectContact, set
                     {files.length}
                   </div>
                 )
-                : <p className='text-sm'>{text}</p>
+                : call
+                  ? call.video
+                    ? (
+                      <div className='flex items-center gap-2'>
+                        {call.times > 0 ? <IoIosVideocam /> : <IoVideocamOff />}
+                        {
+                          call.times > 0
+                          ? (
+                            <div className='flex items-center gap-2'>
+                              <p>{parseInt(call.times / 3600).toString().length < 2 ? '0' + parseInt(call.times / 3600) : parseInt(call.times / 3600)}</p>
+                              <p>:</p>
+                              <p>{parseInt(call.times / 60).toString().length < 2 ? '0' + parseInt(call.times/60) : parseInt(call.times / 60)}</p>
+                              <p>:</p>
+                              <p>{(call.times % 60).toString().length < 2 ? '0' + call.times % 60 : call.times % 60}</p>
+                            </div>
+                          )
+                          : <p>Missed</p>
+                        }
+                      </div>
+                    )
+                    : (
+                      <div className='flex items-center gap-2'>
+                        {call.times > 0 ? <IoIosCall /> : <HiPhoneMissedCall />}
+                        {
+                          call.times > 0
+                          ? (
+                            <div className='flex items-center gap-2'>
+                              <p>{parseInt(call.times / 3600).toString().length < 2 ? '0' + parseInt(call.times / 3600) : parseInt(call.times / 3600)}</p>
+                              <p>:</p>
+                              <p>{parseInt(call.times / 60).toString().length < 2 ? '0' + parseInt(call.times/60) : parseInt(call.times / 60)}</p>
+                              <p>:</p>
+                              <p>{(call.times % 60).toString().length < 2 ? '0' + call.times % 60 : call.times % 60}</p>
+                            </div>
+                          )
+                          : <p>Missed</p>
+                        }
+                      </div>
+                    )
+                  : <p className='text-sm'>{text}</p>
           }
 
           {date && <p className='text-sm text-gray-500'>{new Date(date).toLocaleTimeString()}</p>}

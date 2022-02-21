@@ -30,6 +30,7 @@ const MessageContainer = ({ messages }) => {
             audio={item.audio}
             files={item.files}
             isRead={item.isRead}
+            call={item.call}
             timestamp={new Date(item.createdAt).toLocaleString()}
           />
         ))

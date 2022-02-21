@@ -4,7 +4,7 @@ const Message = require('./../models/Message')
 const messageCtrl = {
   createMessage: async(req, res) => {
     try {
-      const { sender, recipient, text, media, audio, files } = req.body
+      const { sender, recipient, text, media, audio, files, call } = req.body
 
       const conversation = await Conversation.findOneAndUpdate({
         $or: [
@@ -12,7 +12,7 @@ const messageCtrl = {
           { recipients: [recipient, sender] }
         ]
       }, {
-        recipients: [sender, recipient], text, media, audio, files
+        recipients: [sender, recipient], text, media, audio, files, call
       }, {new: true, upsert: true})
 
       const prevTotalUnread = conversation.totalUnread
@@ -28,7 +28,8 @@ const messageCtrl = {
         text,
         media,
         audio,
-        files
+        files,
+        call
       })
 
       await message.save()

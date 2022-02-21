@@ -62,11 +62,11 @@ const RecorderContainer = ({ selectContact, setIsOnMicrophone }) => {
         audio: audioResult.secure_url,
         files: [],
         isRead: false,
+        call: null,
         createdAt: new Date().toISOString()
       }
   
       dispatch(createMessage(chatData, auth.token, socket))
-      console.log(audioResult.secure_url)
     }
   }, [data, audioFile, dispatch, auth, socket, selectContact])
 

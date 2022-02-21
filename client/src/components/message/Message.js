@@ -1,9 +1,12 @@
 import { AiFillFileExcel, AiFillFilePdf, AiFillFilePpt, AiFillFileUnknown, AiFillFileWord, AiFillFileZip, AiOutlineDownload } from 'react-icons/ai'
 import { useSelector } from 'react-redux'
 import { BsCheck2All } from 'react-icons/bs'
+import { IoIosVideocam, IoIosCall } from 'react-icons/io'
+import { IoVideocamOff } from 'react-icons/io5'
+import { HiPhoneMissedCall } from 'react-icons/hi'
 import Avatar from './../general/Avatar'
 
-const Message = ({ type, message, sender, recipientAvatar, audio, media, files, timestamp, isRead }) => {
+const Message = ({ type, message, sender, recipientAvatar, audio, media, files, timestamp, isRead, call }) => {
   const { auth } = useSelector(state => state)
 
   return (
@@ -45,6 +48,58 @@ const Message = ({ type, message, sender, recipientAvatar, audio, media, files, 
                   }
                 </div>
               ))
+            }
+          </div>
+        </div>
+      }
+
+      {
+        call &&
+        <div className={`flex ${type === 'sender' ? 'flex-row-reverse' : undefined}`}>
+          {!message && <Avatar src={type === 'sender' ? auth.user?.avatar : recipientAvatar} size='30px' />}
+          <div className={`${type === 'sender' ? `${message ? '-translate-x-[50px]' : '-translate-x-3'}` : `${message ? 'translate-x-[50px]' : 'translate-x-3'}`}`}>
+            {
+              call.video
+              ? (
+                <div className='flex items-center gap-6 bg-gray-100 p-3 rounded-md mb-1'>
+                  {call.times > 0 ? <IoIosVideocam className='text-2xl text-red-500' /> : <IoVideocamOff className='text-2xl text-red-500' />}
+                  {
+                    call.times > 0
+                    ? (
+                      <div className='flex items-center gap-2'>
+                        <p>{parseInt(call.times / 3600).toString().length < 2 ? '0' + parseInt(call.times / 3600) : parseInt(call.times / 3600)}</p>
+                        <p>:</p>
+                        <p>{parseInt(call.times / 60).toString().length < 2 ? '0' + parseInt(call.times/60) : parseInt(call.times / 60)}</p>
+                        <p>:</p>
+                        <p>{(call.times % 60).toString().length < 2 ? '0' + call.times % 60 : call.times % 60}</p>
+                      </div>
+                    )
+                    : (
+                      <p>Missed Video Call</p>
+                    )
+                  }
+                </div>
+              )
+              : (
+                <div className='flex items-center gap-6 bg-gray-100 p-3 rounded-md mb-1'>
+                  {call.times > 0 ? <IoIosCall className='text-2xl text-red-500' /> : <HiPhoneMissedCall className='text-2xl text-red-500' />}
+                  {
+                    call.times > 0
+                    ? (
+                      <div className='flex items-center gap-2'>
+                        <p>{parseInt(call.times / 3600).toString().length < 2 ? '0' + parseInt(call.times / 3600) : parseInt(call.times / 3600)}</p>
+                        <p>:</p>
+                        <p>{parseInt(call.times / 60).toString().length < 2 ? '0' + parseInt(call.times/60) : parseInt(call.times / 60)}</p>
+                        <p>:</p>
+                        <p>{(call.times % 60).toString().length < 2 ? '0' + call.times % 60 : call.times % 60}</p>
+                      </div>
+                    )
+                    : (
+                      <p>Missed Audio Call</p>
+                    )
+                  }
+                </div>
+              )
             }
           </div>
         </div>
