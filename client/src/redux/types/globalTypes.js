@@ -4,5 +4,6 @@ export const GLOBAL_TYPES = {
   SOCKET: 'SOCKET',
   TYPE: 'TYPE',
   ONLINE: 'ONLINE',
-  OFFLINE: 'OFFLINE'
+  OFFLINE: 'OFFLINE',
+  CALL: 'CALL'
 }

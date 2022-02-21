@@ -8,13 +8,12 @@ import { BiLock } from 'react-icons/bi'
 import { MdLogout } from 'react-icons/md'
 import { RiPhoneFill } from 'react-icons/ri'
 import { IoVideocam } from 'react-icons/io5'
+import { GLOBAL_TYPES } from './../../redux/types/globalTypes'
 import { logout } from './../../redux/actions/authActions'
 import ContactModal from './../modal/ContactModal'
 import SearchPeopleModal from './../modal/SearchPeopleModal'
 import EditProfileModal from './../modal/EditProfileModal'
 import ChangePasswordModal from './../modal/ChangePasswordModal'
-import AudioCallModal from './../modal/AudioCallModal'
-import VideoCallModal from './../modal/VideoCallModal'
 import Avatar from './Avatar'
 
 const Header = ({ selectContact, setSelectContact }) => {
@@ -23,8 +22,6 @@ const Header = ({ selectContact, setSelectContact }) => {
   const [openSearchPeopleModal, setOpenSearchPeopleModal] = useState(false)
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false)
   const [openChangePasswordModal, setOpenChangePasswordModal] = useState(false)
-  const [openAudioCallModal, setOpenAudioCallModal] = useState(false)
-  const [openVideoCallModal, setOpenVideoCallModal] = useState(false)
   const [notFriend, setNotFriend] = useState(false)
 
   const navigate = useNavigate()
@@ -34,6 +31,26 @@ const Header = ({ selectContact, setSelectContact }) => {
   const handleLogout = async() => {
     await dispatch(logout(auth.token, socket))
     navigate('/')
+  }
+
+  const caller = ({ video }) => {
+    const { _id, avatar, name } = selectContact
+    const msg = {
+      sender: auth.user?._id,
+      recipient: _id,
+      avatar,
+      name,
+      video
+    }
+    dispatch({ type: GLOBAL_TYPES.CALL, payload: msg })
+  }
+
+  const handleAudioCall = () => {
+    caller({ video: false })
+  }
+
+  const handleVideoCall = () => {
+    caller({ video: true })
   }
 
   useEffect(() => {
@@ -60,8 +77,8 @@ const Header = ({ selectContact, setSelectContact }) => {
             </div>
             <div className='flex items-center mt-1'>
               <p>Message</p>
-              <RiPhoneFill className='ml-4 text-lg cursor-pointer' onClick={() => setOpenAudioCallModal(true)} />
-              <IoVideocam className='ml-4 text-lg cursor-pointer' onClick={() => setOpenVideoCallModal(true)} />
+              <RiPhoneFill className='ml-4 text-lg cursor-pointer' onClick={handleAudioCall} />
+              <IoVideocam className='ml-4 text-lg cursor-pointer' onClick={handleVideoCall} />
             </div>
           </div>
         }
@@ -104,8 +121,6 @@ const Header = ({ selectContact, setSelectContact }) => {
       <SearchPeopleModal openSearchPeopleModal={openSearchPeopleModal} setOpenSearchPeopleModal={setOpenSearchPeopleModal} />
       <EditProfileModal openEditProfileModal={openEditProfileModal} setOpenEditProfileModal={setOpenEditProfileModal} />
       <ChangePasswordModal openChangePasswordModal={openChangePasswordModal} setOpenChangePasswordModal={setOpenChangePasswordModal} />
-      <AudioCallModal openAudioCallModal={openAudioCallModal} setOpenAudioCallModal={setOpenAudioCallModal} />
-      <VideoCallModal openVideoCallModal={openVideoCallModal} setOpenVideoCallModal={setOpenVideoCallModal} />
     </>
   )
 }

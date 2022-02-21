@@ -6,6 +6,7 @@ import message from './messageReducer'
 import socket from './socketReducer'
 import typing from './typeReducer'
 import status from './statusReducer'
+import call from './callReducer'
 
 export default combineReducers({
   auth,
@@ -14,5 +15,6 @@ export default combineReducers({
   message,
   socket,
   typing,
-  status
+  status,
+  call
 })

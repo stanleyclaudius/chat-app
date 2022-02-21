@@ -9,9 +9,10 @@ import Login from './pages/login'
 import PageRender from './utils/PageRender'
 import Alert from './components/general/Alert'
 import SocketClient from './SocketClient'
+import CallModal from './components/modal/CallModal'
 
 const App = () => {
-  const { auth } = useSelector(state => state)
+  const { auth, call } = useSelector(state => state)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const App = () => {
     <Router>
       <Alert />
       { auth.token && <SocketClient /> }
+      { call && <CallModal /> }
       <Routes>
         <Route path='/' element={auth.user ? <Dashboard /> : <Login />} />
         <Route path='/:page' element={<PageRender />} />
