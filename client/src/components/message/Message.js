@@ -62,7 +62,7 @@ const Message = ({ type, message, sender, recipientAvatar, audio, media, files, 
               call.video
               ? (
                 <div className='flex items-center gap-6 bg-gray-100 p-3 rounded-md mb-1'>
-                  {call.times > 0 ? <IoIosVideocam className='text-2xl text-red-500' /> : <IoVideocamOff className='text-2xl text-red-500' />}
+                  {call.times > 0 ? <IoIosVideocam className='text-2xl text-green-700' /> : <IoVideocamOff className='text-2xl text-red-500' />}
                   {
                     call.times > 0
                     ? (
@@ -82,7 +82,7 @@ const Message = ({ type, message, sender, recipientAvatar, audio, media, files, 
               )
               : (
                 <div className='flex items-center gap-6 bg-gray-100 p-3 rounded-md mb-1'>
-                  {call.times > 0 ? <IoIosCall className='text-2xl text-red-500' /> : <HiPhoneMissedCall className='text-2xl text-red-500' />}
+                  {call.times > 0 ? <IoIosCall className='text-2xl text-green-700' /> : <HiPhoneMissedCall className='text-2xl text-red-500' />}
                   {
                     call.times > 0
                     ? (

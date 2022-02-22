@@ -39,7 +39,7 @@ const ContactCard = ({ text, audio, user, date, media, files, selectContact, set
       <div className='w-full ml-4'>
         <div className='flex items-center gap-3'>
           <p className='text-lg mb-1'>{user.name}</p>
-          {isOnline && <div className='w-2 h-2 rounded-full bg-green-600' />}
+          {isOnline ? <div className='w-2 h-2 rounded-full bg-green-600' /> : <div className='w-2 h-2 rounded-full bg-gray-300' />}
         </div>
         <div className='flex items-center justify-between'>
           {
