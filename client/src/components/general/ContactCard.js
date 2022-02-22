@@ -84,24 +84,26 @@ const ContactCard = ({ text, audio, user, date, media, files, selectContact, set
                         }
                       </div>
                     )
-                    : (
-                      <div className='flex items-center gap-2'>
-                        {call.times > 0 ? <IoIosCall /> : <HiPhoneMissedCall />}
-                        {
-                          call.times > 0
-                          ? (
-                            <div className='flex items-center gap-2'>
-                              <p>{parseInt(call.times / 3600).toString().length < 2 ? '0' + parseInt(call.times / 3600) : parseInt(call.times / 3600)}</p>
-                              <p>:</p>
-                              <p>{parseInt(call.times / 60).toString().length < 2 ? '0' + parseInt(call.times/60) : parseInt(call.times / 60)}</p>
-                              <p>:</p>
-                              <p>{(call.times % 60).toString().length < 2 ? '0' + call.times % 60 : call.times % 60}</p>
-                            </div>
-                          )
-                          : <p>Missed</p>
-                        }
-                      </div>
-                    )
+                    : call.audio
+                      ? (
+                        <div className='flex items-center gap-2'>
+                          {call.times > 0 ? <IoIosCall /> : <HiPhoneMissedCall />}
+                          {
+                            call.times > 0
+                            ? (
+                              <div className='flex items-center gap-2'>
+                                <p>{parseInt(call.times / 3600).toString().length < 2 ? '0' + parseInt(call.times / 3600) : parseInt(call.times / 3600)}</p>
+                                <p>:</p>
+                                <p>{parseInt(call.times / 60).toString().length < 2 ? '0' + parseInt(call.times/60) : parseInt(call.times / 60)}</p>
+                                <p>:</p>
+                                <p>{(call.times % 60).toString().length < 2 ? '0' + call.times % 60 : call.times % 60}</p>
+                              </div>
+                            )
+                            : <p>Missed</p>
+                          }
+                        </div>
+                      )
+                      : ''
                   : <p className='text-sm'>{text}</p>
           }
 

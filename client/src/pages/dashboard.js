@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { AiOutlineWechat } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
 import { MESSAGE_TYPES } from './../redux/types/messageTypes'
@@ -11,9 +11,19 @@ import Header from './../components/general/Header'
 
 const Dashboard = () => {
   const [selectContact, setSelectContact] = useState(false)
+  const [searchContact, setSearchContact] = useState('')
+  const [contacts, setContacts] = useState([])
 
   const dispatch = useDispatch()
   const { auth, conversation, message } = useSelector(state => state)
+
+  const searchConversation = useCallback(async() => {
+    const filteredContact = conversation.filter(item => 
+      (item.recipients[0].name.match(new RegExp(`${searchContact}`, "i")) && item.recipients[0]._id !== auth.user?._id) ||
+      (item.recipients[1].name.match(new RegExp(`${searchContact}`, "i")) && item.recipients[1]._id !== auth.user?._id)
+    )
+    setContacts(filteredContact)
+  }, [conversation, searchContact, auth])
 
   useEffect(() => {
     if (selectContact)
@@ -23,16 +33,27 @@ const Dashboard = () => {
   }, [selectContact, auth.token, dispatch])
 
   useEffect(() => {
-    dispatch(getConversation(auth.token))
-  }, [dispatch, auth.token])
+    if (!searchContact)
+      dispatch(getConversation(auth.token))
+  }, [dispatch, auth.token, searchContact])
+
+  useEffect(() => {
+    if (searchContact.length > 3) {
+      searchConversation()
+    }
+  }, [searchContact, searchConversation])
+
+  useEffect(() => {
+    setContacts(conversation)
+  }, [conversation])
 
   return (
     <>
       <Header selectContact={selectContact} setSelectContact={setSelectContact} />
       <div className='md:flex md:static relative overflow-x-hidden'>
         <div className='md:flex-1 md:border-r-2'>
-          <SearchForm placeholder='Search contact ...' />
-          <ContactContainer conversation={conversation} selectContact={selectContact} setSelectContact={setSelectContact} />
+          <SearchForm placeholder='Search contact ...' value={searchContact} onChange={e => setSearchContact(e.target.value)} disabled={conversation.length > 0 ? false : true} />
+          <ContactContainer conversation={contacts} selectContact={selectContact} setSelectContact={setSelectContact} />
         </div>
         <div className={`md:flex-[3] md:static transition-all duration-200 absolute top-0 bottom-0 h-[100%] bg-white md:h-[90vh] w-full flex flex-col ${selectContact ? 'right-0' : '-right-[5000px]'}`}>
           {
