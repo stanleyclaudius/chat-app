@@ -38,11 +38,11 @@ const Header = ({ selectContact, setSelectContact }) => {
     const msg = {
       sender: auth.user?._id,
       recipient: _id,
-      avatar,
-      name,
+      avatar: auth.user?.avatar,
+      name: auth.user?.name,
       video,
-      recipientName: auth.user?.name,
-      recipientAvatar: auth.user?.avatar
+      recipientName: name,
+      recipientAvatar: avatar
     }
     dispatch({ type: GLOBAL_TYPES.CALL, payload: msg })
   }

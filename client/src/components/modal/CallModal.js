@@ -52,13 +52,13 @@ const CallModal = () => {
       const chatData = {
         sender: {
           _id: call.sender,
-          name: call.recipientName,
-          avatar: call.recipientAvatar
+          name: call.name,
+          avatar: call.avatar
         },
         recipient: {
           _id: call.recipient,
-          name: call.name,
-          avatar: call.avatar
+          name: call.recipientName,
+          avatar: call.recipientAvatar
         },
         text: '',
         media: [],
