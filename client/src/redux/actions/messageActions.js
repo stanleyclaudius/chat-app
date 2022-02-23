@@ -32,7 +32,10 @@ export const getMessages = (id, token) => async(dispatch) => {
     const res = await getDataAPI(`message/${id}`, accessToken)
     dispatch({
       type: MESSAGE_TYPES.GET_MESSAGE,
-      payload: res.data.messages
+      payload: {
+        data: res.data.messages.reverse(),
+        result: res.data.result
+      }
     })
   } catch (err) {
     dispatch({

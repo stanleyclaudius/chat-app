@@ -60,7 +60,7 @@ const Dashboard = () => {
             selectContact
             ? (
               <>
-                <MessageContainer messages={message} />
+                <MessageContainer selectContact={selectContact} messages={message} />
                 <ChatInput selectContact={selectContact} />
               </>
             )
