@@ -274,9 +274,9 @@ export const changePassword = (passwordData, token) => async(dispatch) => {
   }
 }
 
-export const editProfile = (userData, avatar, token) => async(dispatch) => {
-  const tokenValidityResult = await checkTokenValidity(token, dispatch)
-  const accessToken = tokenValidityResult ? tokenValidityResult : token
+export const editProfile = (userData, avatar, auth) => async(dispatch) => {
+  const tokenValidityResult = await checkTokenValidity(auth.token, dispatch)
+  const accessToken = tokenValidityResult ? tokenValidityResult : auth.token
 
   try {
     let imgLink = ''
@@ -293,7 +293,12 @@ export const editProfile = (userData, avatar, token) => async(dispatch) => {
     dispatch({
       type: GLOBAL_TYPES.AUTH,
       payload: {
-        user: res.data.user,
+        user: {
+          ...auth.user,
+          avatar: res.data.user.avatar,
+          name: res.data.user.name,
+          userId: res.data.user.userId
+        },
         token: accessToken
       }
     })
