@@ -10,6 +10,7 @@ import HeadInfo from './../../utils/HeadInfo'
 const MessageContainer = ({ selectContact, messages }) => {
   const [currPage, setCurrPage] = useState(2)
   const [isLoading, setIsLoading] = useState(false)
+  const [firstLoad, setFirstLoad] = useState(false)
 
   const dispatch = useDispatch()
   const { auth, typing } = useSelector(state => state)
@@ -18,19 +19,21 @@ const MessageContainer = ({ selectContact, messages }) => {
   const loadMoreRef = useRef()
 
   const loadMoreMessages = useCallback(async() => {
-    const tokenValidity = await checkTokenValidity(auth.token, dispatch)
-    const accessToken = tokenValidity ? tokenValidity : auth.token
+    if (firstLoad) {
+      const tokenValidity = await checkTokenValidity(auth.token, dispatch)
+      const accessToken = tokenValidity ? tokenValidity : auth.token
 
-    setIsLoading(true)
-    const res = await getDataAPI(`message/${selectContact._id}?page=${currPage}`, accessToken)
-    dispatch({
-      type: MESSAGE_TYPES.LOAD_MESSAGE,
-      payload: res.data
-    })
-    setCurrPage(prevVal => prevVal + 1)
-    setIsLoading(false)
-    document.getElementById('messageContainer').scroll(0, document.documentElement.scrollHeight + 300)
-  }, [auth.token, selectContact, currPage, dispatch])
+      setIsLoading(true)
+      const res = await getDataAPI(`message/${selectContact._id}?page=${currPage}`, accessToken)
+      dispatch({
+        type: MESSAGE_TYPES.LOAD_MESSAGE,
+        payload: res.data
+      })
+      setCurrPage(prevVal => prevVal + 1)
+      setIsLoading(false)
+      document.getElementById('messageContainer').scroll(0, document.documentElement.scrollHeight + 300)
+    }
+  }, [auth.token, selectContact, currPage, dispatch, firstLoad])
 
   useEffect(() => {
     const observer = new IntersectionObserver(async entries => {
@@ -59,8 +62,18 @@ const MessageContainer = ({ selectContact, messages }) => {
     if (selectContact) {
       dispatch({ type: MESSAGE_TYPES.CLEAR_MESSAGE })
       setCurrPage(2)
+      setFirstLoad(false)
     }
   }, [dispatch, selectContact])
+
+  useEffect(() => {
+    const load = setTimeout(() => {
+      if (!firstLoad)
+        setFirstLoad(true)
+    }, 1000)
+
+    return () => clearTimeout(load)
+  }, [firstLoad])
 
   return (
     <>
