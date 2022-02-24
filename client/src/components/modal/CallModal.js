@@ -6,6 +6,7 @@ import { GLOBAL_TYPES } from './../../redux/types/globalTypes'
 import { createMessage } from './../../redux/actions/messageActions'
 import Avatar from './../general/Avatar'
 import VideoCallModal from './VideoCallModal'
+import Ringtone from './../../audio/ringtone.mp3'
 
 const CallModal = () => {
   const [hour, setHour] = useState(0)
@@ -17,6 +18,7 @@ const CallModal = () => {
 
   const yourVideo = useRef()
   const otherVideo = useRef()
+  const audioRef = useRef()
 
   const dispatch = useDispatch()
   const { auth, call, socket, peer } = useSelector(state => state)
@@ -166,8 +168,20 @@ const CallModal = () => {
     return () => socket.off('callerDisconnect')
   }, [dispatch, socket, tracks, addCallMessages, answer, call, total])
 
+  useEffect(() => {
+    if (answer) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+    } else {
+      audioRef.current.play()
+    }
+  }, [answer])
+
   return (
     <>
+      <audio controls ref={audioRef} className='hidden' loop>
+        <source src={Ringtone} type='audio/mp3' />
+      </audio>
       <div className={`bg-[rgba(0,0,0,.7)] fixed top-0 right-0 bottom-0 left-0 z-[999] p-5 flex items-center justify-center ${answer && call.video ? 'hidden' : 'block'}`}>
         <div className='bg-white w-full max-w-[350px] p-8 flex items-center justify-center flex-col rounded-lg shadow-2xl'>
           <Avatar src={call.avatar} alt={call.name} />

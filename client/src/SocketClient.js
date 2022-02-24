@@ -4,6 +4,15 @@ import { GLOBAL_TYPES } from './redux/types/globalTypes'
 import { MESSAGE_TYPES } from './redux/types/messageTypes'
 import { CONVERSATION_TYPES } from './redux/types/conversationTypes'
 
+const spawnNotification = (body, icon, url, title) => {
+  let options = {body, icon}
+  let n = new Notification(title, options)
+  n.onClick = e => {
+    e.preventDefault()
+    window.open(url, '_blank')
+  }
+}
+
 const SocketClient = () => {
   const dispatch = useDispatch()
   const { auth, socket, status, call } = useSelector(state => state)
@@ -43,6 +52,8 @@ const SocketClient = () => {
         type: CONVERSATION_TYPES.UPDATE_CONVERSATION,
         payload: data
       })
+
+      spawnNotification(data.sender.name, data.sender.avatar, 'http://localhost:3000', 'Inspace')
     })
 
     return () => socket.off('createMessageToClient')
