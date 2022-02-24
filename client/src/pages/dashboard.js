@@ -8,6 +8,7 @@ import SearchForm from './../components/input/SearchForm'
 import MessageContainer from '../components/message/MessageContainer'
 import ContactContainer from '../components/general/ContactContainer'
 import Header from './../components/general/Header'
+import HeadInfo from './../utils/HeadInfo'
 
 const Dashboard = () => {
   const [selectContact, setSelectContact] = useState(false)
@@ -49,6 +50,7 @@ const Dashboard = () => {
 
   return (
     <>
+      <HeadInfo title='Inspace - Message' />
       <Header selectContact={selectContact} setSelectContact={setSelectContact} />
       <div className='md:flex md:static relative overflow-x-hidden'>
         <div className='md:flex-1 md:border-r-2'>

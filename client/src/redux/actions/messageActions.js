@@ -34,7 +34,8 @@ export const getMessages = (id, token) => async(dispatch) => {
       type: MESSAGE_TYPES.GET_MESSAGE,
       payload: {
         data: res.data.messages.reverse(),
-        result: res.data.result
+        result: res.data.result,
+        firstLoad: true
       }
     })
   } catch (err) {

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { GLOBAL_TYPES } from './../../redux/types/globalTypes'
 import { postDataAPI } from './../../utils/fetchData'
+import HeadInfo from './../../utils/HeadInfo'
 
 const ActivateAccount = () => {
   const { id } = useParams()
@@ -26,7 +27,10 @@ const ActivateAccount = () => {
   }, [activateUserAccount])
 
   return (
-    <div></div>
+    <>
+      <HeadInfo title='Inspace - Account Activation' />
+      <div></div>
+    </>
   )
 }
 

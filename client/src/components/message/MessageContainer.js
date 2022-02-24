@@ -5,6 +5,7 @@ import { checkTokenValidity } from './../../utils/checkTokenValidity'
 import { getDataAPI } from './../../utils/fetchData'
 import Loader from './../general/Loader'
 import Message from './Message'
+import HeadInfo from './../../utils/HeadInfo'
 
 const MessageContainer = ({ selectContact, messages }) => {
   const [currPage, setCurrPage] = useState(2)
@@ -62,40 +63,43 @@ const MessageContainer = ({ selectContact, messages }) => {
   }, [dispatch, selectContact])
 
   return (
-    <div className='flex-1 px-5 py-7 overflow-auto message-container' id='messageContainer' ref={messageContainerRef}>
-      {
-        messages.result < 9 * (currPage - 1)
-        ? ''
-        : (
-          <>
-            {
-              isLoading
-              ? <Loader xl />
-              : <button className='bg-gray-200 rounded-md p-3 opacity-0' onClick={loadMoreMessages} ref={loadMoreRef}>Load More</button>
-            }
-          </>
-        )
-      }
+    <>
+      <HeadInfo title={`Inspace - ${selectContact.name}`} />
+      <div className='flex-1 px-5 py-7 overflow-auto message-container' id='messageContainer' ref={messageContainerRef}>
+        {
+          messages.result < 9 * (currPage - 1)
+          ? ''
+          : (
+            <>
+              {
+                isLoading
+                ? <Loader xl />
+                : <button className='bg-gray-200 rounded-md p-3 w-full opacity-0' onClick={loadMoreMessages} ref={loadMoreRef}>Load More</button>
+              }
+            </>
+          )
+        }
 
-      {
-        messages?.data?.map((item, idx) => (
-          <Message
-            key={idx}
-            type={item.sender._id === auth.user?._id ? 'sender' : 'receiver'}
-            sender={item.sender}
-            recipientAvatar={item.sender?.avatar}
-            message={item.text}
-            media={item.media}
-            audio={item.audio}
-            files={item.files}
-            isRead={item.isRead}
-            call={item.call}
-            timestamp={new Date(item.createdAt).toLocaleString()}
-          />
-        ))
-      }
-      <p className='animate-bounce'>{typing.message && typing.message}</p>
-    </div>
+        {
+          messages?.data?.map((item, idx) => (
+            <Message
+              key={idx}
+              type={item.sender._id === auth.user?._id ? 'sender' : 'receiver'}
+              sender={item.sender}
+              recipientAvatar={item.sender?.avatar}
+              message={item.text}
+              media={item.media}
+              audio={item.audio}
+              files={item.files}
+              isRead={item.isRead}
+              call={item.call}
+              timestamp={new Date(item.createdAt).toLocaleString()}
+            />
+          ))
+        }
+        <p className='animate-bounce'>{typing.message && typing.message}</p>
+      </div>
+    </>
   )
 }
 

@@ -11,6 +11,7 @@ import GoogleLogin from 'react-google-login-lite'
 import FacebookLogin from 'react-facebook-login-lite'
 import ForgetPasswordModal from './../components/modal/ForgetPasswordModal'
 import Loader from './../components/general/Loader'
+import HeadInfo from './../utils/HeadInfo'
 
 const Login = () => {
   const [userData, setUserData] = useState({
@@ -63,6 +64,7 @@ const Login = () => {
 
   return (
     <>
+      <HeadInfo title='Inspace - Login' />
       <div className='flex'>
         <div className='p-9 flex-1'>
           <div className='flex items-center mb-12'>
