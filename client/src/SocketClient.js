@@ -53,7 +53,7 @@ const SocketClient = () => {
         payload: data
       })
 
-      spawnNotification(data.sender.name, data.sender.avatar, 'http://localhost:3000', 'Inspace')
+      spawnNotification(data.sender.name, data.sender.avatar, 'https://web-inspace.herokuapp.com', 'Inspace')
     })
 
     return () => socket.off('createMessageToClient')
