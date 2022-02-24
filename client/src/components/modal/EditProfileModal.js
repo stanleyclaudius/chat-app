@@ -5,7 +5,7 @@ import { GLOBAL_TYPES } from './../../redux/types/globalTypes'
 import { editProfile } from './../../redux/actions/authActions'
 import Loader from './../general/Loader'
 
-const EditProfileModal = ({ openEditProfileModal, setOpenEditProfileModal }) => {
+const EditProfileModal = ({ editProfileRef, openEditProfileModal, setOpenEditProfileModal }) => {
   const [userData, setUserData] = useState({
     name: '',
     userId: ''
@@ -50,10 +50,10 @@ const EditProfileModal = ({ openEditProfileModal, setOpenEditProfileModal }) => 
 
   return (
     <div className={`${openEditProfileModal ? 'opacity-100' : 'opacity-0'} ${openEditProfileModal ? 'pointer-events-auto' : 'pointer-events-none'} transition-opacity fixed top-0 left-0 bottom-0 right-0 flex items-center justify-center bg-[rgba(0,0,0,.6)] p-5 z-[9999]`}>
-      <div className={`${openEditProfileModal ? 'translate-y-0' : '-translate-y-12'} transition-transform w-full max-w-[450px] bg-white rounded-md`}>
+      <div ref={editProfileRef} className={`${openEditProfileModal ? 'translate-y-0' : '-translate-y-12'} transition-transform w-full max-w-[450px] bg-white rounded-md`}>
         <div className='flex items-center justify-between py-3 px-5 border-b-2'>
           <h1 className='text-xl'>Edit Profile</h1>
-          <AiOutlineClose className='text-xl cursor-pointer' onClick={() => setOpenEditProfileModal(false)} />
+          <AiOutlineClose className='text-xl cursor-pointer' onClick={() => setOpenEditProfileModal(oldValue => !oldValue)} />
         </div>
         <div className='p-5'>
           <form onSubmit={handleSubmit}>

@@ -6,7 +6,7 @@ import { GLOBAL_TYPES } from './../../redux/types/globalTypes'
 import { changePassword } from './../../redux/actions/authActions'
 import Loader from './../general/Loader'
 
-const ChangePasswordModal = ({ openChangePasswordModal, setOpenChangePasswordModal }) => {
+const ChangePasswordModal = ({ changePasswordRef, openChangePasswordModal, setOpenChangePasswordModal }) => {
   const [passwordData, setPasswordData] = useState({
     currPassword: '',
     newPassword: '',
@@ -52,7 +52,7 @@ const ChangePasswordModal = ({ openChangePasswordModal, setOpenChangePasswordMod
 
   return (
     <div className={`${openChangePasswordModal ? 'opacity-100' : 'opacity-0'} ${openChangePasswordModal ? 'pointer-events-auto' : 'pointer-events-none'} transition-opacity flex items-center justify-center fixed top-0 left-0 right-0 bottom-0 z-[9999] bg-[rgba(0,0,0,.6)] p-5`}>
-      <div className={`${openChangePasswordModal ? 'translate-y-0' : '-translate-y-12'} transition-transform w-full max-w-[500px] bg-white rounded-md`}>
+      <div ref={changePasswordRef} className={`${openChangePasswordModal ? 'translate-y-0' : '-translate-y-12'} transition-transform w-full max-w-[500px] bg-white rounded-md`}>
         <div className='flex items-center justify-between py-3 px-5 border-b-2'>
           <h1 className='text-xl'>Change Password</h1>
           <AiOutlineClose className='cursor-pointer text-xl' onClick={() => setOpenChangePasswordModal(false)} />

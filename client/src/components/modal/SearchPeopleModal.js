@@ -8,7 +8,7 @@ import { checkTokenValidity } from './../../utils/checkTokenValidity'
 import Avatar from './../general/Avatar'
 import Loader from './../general/Loader'
 
-const SearchPeopleModal = ({ openSearchPeopleModal, setOpenSearchPeopleModal }) => {
+const SearchPeopleModal = ({ searchPeopleRef, openSearchPeopleModal, setOpenSearchPeopleModal }) => {
   const [userId, setUserId] = useState('')
   const [loading, setLoading] = useState(false)
   const [loadingAddFriend, setLoadingAddFriend] = useState(false)
@@ -82,10 +82,10 @@ const SearchPeopleModal = ({ openSearchPeopleModal, setOpenSearchPeopleModal }) 
 
   return (
     <div className={`${openSearchPeopleModal ? 'opacity-100' : 'opacity-0'} ${openSearchPeopleModal ? 'pointer-events-auto' : 'pointer-events-none'} transition-opacity fixed top-0 left-0 bottom-0 right-0 bg-[rgba(0,0,0,.6)] flex items-center justify-center p-5 z-[9999]`}>
-      <div className={`${openSearchPeopleModal ? 'translate-y-0' : '-translate-y-12'} transition-transform w-full max-w-[400px] bg-white rounded-md`}>
+      <div ref={searchPeopleRef} className={`${openSearchPeopleModal ? 'translate-y-0' : '-translate-y-12'} transition-transform w-full max-w-[400px] bg-white rounded-md`}>
         <div className='flex items-center justify-between px-5 py-3 border-b-2'>
           <h1 className='text-xl'>Search People</h1>
-          <AiOutlineClose className='text-xl cursor-pointer' onClick={() => setOpenSearchPeopleModal(false)} />
+          <AiOutlineClose className='text-xl cursor-pointer' onClick={() => setOpenSearchPeopleModal(oldValue => !oldValue)} />
         </div>
         <div className='p-5'>
           <form onSubmit={handleSubmit}>

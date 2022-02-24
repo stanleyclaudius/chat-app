@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { IoChevronBackOutline } from 'react-icons/io5'
@@ -27,6 +27,12 @@ const Header = ({ selectContact, setSelectContact }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const { auth, socket, peer } = useSelector(state => state)
+
+  const dropdownRef = useRef()
+  const contactListRef = useRef()
+  const searchPeopleRef = useRef()
+  const editProfileRef = useRef()
+  const changePasswordRef = useRef()
 
   const handleLogout = async() => {
     await dispatch(logout(auth.token, socket))
@@ -83,6 +89,61 @@ const Header = ({ selectContact, setSelectContact }) => {
     }
   }, [selectContact, auth.user?.friends])
 
+  useEffect(() => {
+    const checkIflickedOutside = e => {
+      if (openDropdown && dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpenDropdown(false)
+      }
+    }
+
+    document.addEventListener('mousedown', checkIflickedOutside)
+    return () => document.removeEventListener('mousedown', checkIflickedOutside)
+  }, [openDropdown])
+
+  useEffect(() => {
+    const checkIflickedOutside = e => {
+      if (SearchPeopleModal && searchPeopleRef.current && !searchPeopleRef.current.contains(e.target)) {
+        setOpenSearchPeopleModal(false)
+      }
+    }
+
+    document.addEventListener('mousedown', checkIflickedOutside)
+    return () => document.removeEventListener('mousedown', checkIflickedOutside)
+  }, [openSearchPeopleModal])
+
+  useEffect(() => {
+    const checkIflickedOutside = e => {
+      if (openContactListModal && contactListRef.current && !contactListRef.current.contains(e.target)) {
+        setOpenContactListModal(false)
+      }
+    }
+
+    document.addEventListener('mousedown', checkIflickedOutside)
+    return () => document.removeEventListener('mousedown', checkIflickedOutside)
+  }, [openContactListModal])
+
+  useEffect(() => {
+    const checkIflickedOutside = e => {
+      if (openEditProfileModal && editProfileRef.current && !editProfileRef.current.contains(e.target)) {
+        setOpenEditProfileModal(false)
+      }
+    }
+
+    document.addEventListener('mousedown', checkIflickedOutside)
+    return () => document.removeEventListener('mousedown', checkIflickedOutside)
+  }, [openEditProfileModal])
+
+  useEffect(() => {
+    const checkIflickedOutside = e => {
+      if (openChangePasswordModal && changePasswordRef.current && !changePasswordRef.current.contains(e.target)) {
+        setOpenChangePasswordModal(false)
+      }
+    }
+
+    document.addEventListener('mousedown', checkIflickedOutside)
+    return () => document.removeEventListener('mousedown', checkIflickedOutside)
+  }, [openChangePasswordModal])
+
   return (
     <>
       <div className='flex items-center justify-between border-b-2 py-1 md:px-12 px-4 sticky top-0 z-[50]'>
@@ -107,7 +168,7 @@ const Header = ({ selectContact, setSelectContact }) => {
         <div className='flex items-center'>
           <p className='mr-5 md:block hidden'>{auth.user?.name}</p>
           <div className='relative'>
-            <div className='cursor-pointer' onClick={() => setOpenDropdown(!openDropdown)}>
+            <div className='cursor-pointer' onClick={() => setOpenDropdown(oldState => !oldState)} ref={dropdownRef}>
               <Avatar size='20px' src={auth.user?.avatar} alt={auth.user?.name} />
             </div>
             <div className={`border-2 transition-transform absolute origin-top translate-y-[10px] top-full right-0 w-[190px] bg-white drop-shadow-xl rounded-md ${openDropdown ? 'scale-y-100' : 'scale-y-0'}`}>
@@ -139,10 +200,10 @@ const Header = ({ selectContact, setSelectContact }) => {
         </div>
       </div>
 
-      <ContactModal openContactListModal={openContactListModal} setOpenContactListModal={setOpenContactListModal} setSelectContact={setSelectContact} />
-      <SearchPeopleModal openSearchPeopleModal={openSearchPeopleModal} setOpenSearchPeopleModal={setOpenSearchPeopleModal} />
-      <EditProfileModal openEditProfileModal={openEditProfileModal} setOpenEditProfileModal={setOpenEditProfileModal} />
-      <ChangePasswordModal openChangePasswordModal={openChangePasswordModal} setOpenChangePasswordModal={setOpenChangePasswordModal} />
+      <ContactModal contactListRef={contactListRef} openContactListModal={openContactListModal} setOpenContactListModal={setOpenContactListModal} setSelectContact={setSelectContact} />
+      <SearchPeopleModal searchPeopleRef={searchPeopleRef} openSearchPeopleModal={openSearchPeopleModal} setOpenSearchPeopleModal={setOpenSearchPeopleModal} />
+      <EditProfileModal editProfileRef={editProfileRef} openEditProfileModal={openEditProfileModal} setOpenEditProfileModal={setOpenEditProfileModal} />
+      <ChangePasswordModal changePasswordRef={changePasswordRef} openChangePasswordModal={openChangePasswordModal} setOpenChangePasswordModal={setOpenChangePasswordModal} />
     </>
   )
 }

@@ -5,7 +5,7 @@ import { getDataAPI } from './../../utils/fetchData'
 import { checkTokenValidity } from './../../utils/checkTokenValidity'
 import PersonCard from './../general/PersonCard'
 
-const ContactModal = ({ openContactListModal, setOpenContactListModal, setSelectContact }) => {
+const ContactModal = ({ contactListRef, openContactListModal, setOpenContactListModal, setSelectContact }) => {
   const [search, setSearch] = useState('')
   const [friendList, setFriendList] = useState([])
 
@@ -34,10 +34,10 @@ const ContactModal = ({ openContactListModal, setOpenContactListModal, setSelect
 
   return (
     <div className={`${openContactListModal ? 'opacity-100' : 'opacity-0'} ${openContactListModal ? 'pointer-events-auto' : 'pointer-events-none'} transition-opacity fixed top-0 bottom-0 right-0 left-0 bg-[rgba(0,0,0,.6)] z-[9999] flex items-center justify-center p-5`}>
-      <div className={`${openContactListModal ? 'translate-y-0' : '-translate-y-12'} transition-transform w-full max-w-[900px] bg-white rounded-md`}>
+      <div ref={contactListRef} className={`${openContactListModal ? 'translate-y-0' : '-translate-y-12'} transition-transform w-full max-w-[900px] bg-white rounded-md`}>
         <div className='flex items-center justify-between py-3 px-5 border-b-2'>
           <h1 className='text-xl'>Contact List</h1>
-          <AiOutlineClose className='cursor-pointer text-xl' onClick={() => setOpenContactListModal(false)} />
+          <AiOutlineClose className='cursor-pointer text-xl' onClick={() => setOpenContactListModal(oldState => !oldState)} />
         </div>
         <div className='py-5 px-5'>
           <div className='flex items-center justify-between border border-gray-500 w-fit rounded-md p-2 md:w-[400px] w-[100%] float-right'>
