@@ -21,7 +21,7 @@ const ContactContainer = ({ conversation, selectContact, setSelectContact }) => 
                   user={item.recipients[0]._id === auth.user?._id ? item.recipients[1] : item.recipients[0]}
                   recipients={item.recipients}
                   isOnline={status.find(user => (user === item.recipients[0]._id) || (user === item.recipients[1]._id))}
-                  date={item.createdAt}
+                  date={item.updatedAt}
                   selectContact={selectContact}
                   totalUnread={item.totalUnread}
                   call={item.call}

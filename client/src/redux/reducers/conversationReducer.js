@@ -23,7 +23,8 @@ const conversationReducer = (state = [], action) => {
         files: action.payload.files,
         call: action.payload.call,
         totalUnread: conversationData.totalUnread + 1,
-        createdAt: action.payload.createdAt
+        createdAt: action.payload.createdAt,
+        updatedAt: action.payload.updatedAt
       }
 
       const tempState = state.filter(item => item._id !== newConversationData._id)
@@ -39,6 +40,7 @@ const conversationReducer = (state = [], action) => {
           files: action.payload.files ? action.payload.files : [],
           call: action.payload.call ? action.payload.call : {},
           createdAt: action.payload.createdAt ? action.payload.createdAt : '',
+          updatedAt: action.payload.updatedAt ? action.payload.updatedAt : '',
           recipients: [
             {
               _id: action.payload.senderId,

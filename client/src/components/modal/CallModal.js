@@ -68,7 +68,8 @@ const CallModal = () => {
         files: [],
         isRead: false,
         call: { video: call.video, times },
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       }
 
       dispatch(createMessage(chatData, auth.token, socket))

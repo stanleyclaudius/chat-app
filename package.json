@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "concurrently": "^7.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "cross-fetch": "^3.1.5",
@@ -19,7 +20,13 @@
   },
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server"
+    "server": "nodemon server.js",
+    "client": "cd client && npm run start",
+    "server-install": "npm install",
+    "client-install": "cd client && npm install",
+    "install-all": "concurrently \"npm run server-install\" \"npm run client-install\" ",
+    "dev": "concurrently \"npm run server\" \"npm run client\" ",
+    "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "name": "chat-app",
   "version": "1.0.0",

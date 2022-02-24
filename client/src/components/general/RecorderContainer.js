@@ -63,7 +63,8 @@ const RecorderContainer = ({ selectContact, setIsOnMicrophone }) => {
         files: [],
         isRead: false,
         call: null,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
       }
   
       dispatch(createMessage(chatData, auth.token, socket))
