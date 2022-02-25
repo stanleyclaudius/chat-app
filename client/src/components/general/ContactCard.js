@@ -84,7 +84,7 @@ const ContactCard = ({ text, audio, user, date, media, files, selectContact, set
                         }
                       </div>
                     )
-                    : call.audio
+                    : !call.video
                       ? (
                         <div className='flex items-center gap-2'>
                           {call.times > 0 ? <IoIosCall /> : <HiPhoneMissedCall />}

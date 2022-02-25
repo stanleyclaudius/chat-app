@@ -78,7 +78,7 @@ const MessageContainer = ({ selectContact, messages }) => {
   return (
     <>
       <HeadInfo title={`Inspace - ${selectContact.name}`} />
-      <div className='flex-1 px-5 py-7 overflow-auto message-container' id='messageContainer' ref={messageContainerRef}>
+      <div className='overflow-x-hidden flex-1 px-5 py-7 overflow-auto message-container' id='messageContainer' ref={messageContainerRef}>
         {
           messages.result < 9 * (currPage - 1)
           ? ''
