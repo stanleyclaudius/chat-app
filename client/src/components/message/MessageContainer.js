@@ -70,7 +70,7 @@ const MessageContainer = ({ selectContact, messages }) => {
     const load = setTimeout(() => {
       if (!firstLoad)
         setFirstLoad(true)
-    }, 1000)
+    }, 2000)
 
     return () => clearTimeout(load)
   }, [firstLoad])

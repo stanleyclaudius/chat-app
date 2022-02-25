@@ -146,7 +146,7 @@ const Header = ({ selectContact, setSelectContact }) => {
 
   return (
     <>
-      <div className='bg-white flex items-center justify-between border-b-2 py-1 md:px-12 sticky top-0 px-4 z-[50]'>
+      <div className='bg-white flex items-center h-[90px] justify-between border-b-2 py-1 md:px-12 sticky top-0 px-4 z-[50]'>
         <div className='flex items-center'>
           <img src={`${process.env.PUBLIC_URL}/images/logo.png`} alt='Inspace' width='35' />
           <h1 className='md:block hidden font-logo text-lg ml-4'>Inspace</h1>
