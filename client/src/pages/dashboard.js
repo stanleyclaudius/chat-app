@@ -49,7 +49,7 @@ const Dashboard = () => {
   }, [conversation])
 
   return (
-    <div className='flex flex-col'>
+    <>
       <HeadInfo title='Inspace - Message' />
       <Header selectContact={selectContact} setSelectContact={setSelectContact} />
       <div className='md:flex md:static relative overflow-x-hidden'>
@@ -75,7 +75,7 @@ const Dashboard = () => {
           }
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
