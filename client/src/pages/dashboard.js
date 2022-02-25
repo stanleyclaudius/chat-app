@@ -57,7 +57,7 @@ const Dashboard = () => {
           <SearchForm placeholder='Search contact ...' value={searchContact} onChange={e => setSearchContact(e.target.value)} disabled={conversation.length > 0 ? false : true} />
           <ContactContainer conversation={contacts} selectContact={selectContact} setSelectContact={setSelectContact} />
         </div>
-        <div className={`md:flex-[3] md:static transition-all duration-200 absolute top-0 bottom-0 h-[100%] bg-white md:h-[90vh] w-full flex flex-col ${selectContact ? 'right-0' : '-right-[5000px]'}`}>
+        <div className={`md:flex-[3] md:static transition-all duration-200 absolute top-0 bottom-0 bg-white md:h-[90vh] w-full flex flex-col ${selectContact ? 'right-0' : '-right-[5000px]'}`}>
           {
             selectContact
             ? (
