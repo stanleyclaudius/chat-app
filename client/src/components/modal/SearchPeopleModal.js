@@ -91,7 +91,7 @@ const SearchPeopleModal = ({ searchPeopleRef, openSearchPeopleModal, setOpenSear
           <form onSubmit={handleSubmit}>
             <div className='w-full border-2 rounded-md py-2 px-3 flex items-center'>
               <FaRegUser className='text-gray-500 mr-3' />
-              <input type='text' placeholder='User ID' autoComplete='off' value={userId} onChange={e => setUserId(e.target.value.trim())} className='w-full outline-0' />
+              <input type='text' placeholder='User ID' autoComplete='off' value={userId.replace(' ', '')} onChange={e => setUserId(e.target.value)} className='w-full outline-0' />
             </div>
             <button type='submit' className={`${loading ? 'bg-blue-300' : 'bg-blue-500'} mt-4 ${!loading ? 'hover:bg-blue-600' : undefined} transition-[background] w-20 h-9 text-white rounded-md float-right ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`} disabled={loading ? true : false}>
               {

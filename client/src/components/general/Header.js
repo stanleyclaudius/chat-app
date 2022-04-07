@@ -168,10 +168,10 @@ const Header = ({ selectContact, setSelectContact }) => {
         <div className='flex items-center'>
           <p className='mr-5 md:block hidden'>{auth.user?.name}</p>
           <div className='relative'>
-            <div className='cursor-pointer' onClick={() => setOpenDropdown(oldState => !oldState)} ref={dropdownRef}>
+            <div className='cursor-pointer' onClick={() => setOpenDropdown(oldState => !oldState)}>
               <Avatar size='20px' src={auth.user?.avatar} alt={auth.user?.name} />
             </div>
-            <div className={`border-2 transition-transform absolute origin-top translate-y-[10px] top-full right-0 w-[190px] bg-white drop-shadow-xl rounded-md ${openDropdown ? 'scale-y-100' : 'scale-y-0'}`}>
+            <div ref={dropdownRef} className={`border-2 transition-transform absolute origin-top translate-y-[10px] top-full right-0 w-[190px] bg-white drop-shadow-xl rounded-md ${openDropdown ? 'scale-y-100' : 'scale-y-0'}`}>
               <div className='flex items-center p-3 hover:bg-gray-100 cursor-pointer border-b-2 rounded-tl-md rounded-tr-md' onClick={() => setOpenSearchPeopleModal(true)}>
                 <AiOutlineSearch className='mr-2 translate-y-[1px]' />
                 <p>Search People</p>

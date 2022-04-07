@@ -73,7 +73,7 @@ const EditProfileModal = ({ editProfileRef, openEditProfileModal, setOpenEditPro
             </div>
             <div className='mb-6'>
               <label htmlFor='userId'>User ID</label>
-              <input type='text' id='userId' name='userId' className='border border-gray-400 rounded-md w-full h-9 mt-2 outline-0 px-2' autoComplete='off' value={userData.userId} onChange={e => setUserData({...userData, userId: e.target.value.trim()})} />
+              <input type='text' id='userId' name='userId' className='border border-gray-400 rounded-md w-full h-9 mt-2 outline-0 px-2' autoComplete='off' value={userData.userId} onChange={e => setUserData({...userData, userId: e.target.value.replace(' ', '')})} />
             </div>
             <button type='submit' className={`${loading ? 'bg-blue-300' : 'bg-blue-500'} ${!loading ? 'hover:bg-blue-600' : undefined} transition-[background] text-white rounded-md h-9 w-24 float-right text-sm ${loading ? 'cursor-not-allowed' : 'cursor-pointer'}`} disabled={loading ? true : false}>
               {
