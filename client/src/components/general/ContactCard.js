@@ -64,7 +64,7 @@ const ContactCard = ({ text, audio, user, date, media, files, selectContact, set
                     {files.length}
                   </div>
                 )
-                : call
+                : call && Object.keys(call).length > 0
                   ? call.video
                     ? (
                       <div className='flex items-center gap-2'>
